@@ -235,7 +235,7 @@ class ProcessScheduler:
 
     def Edf(self, ProcessArray):
         """This function implement the earliest deadline first algorithm
-
+        It's a dynamic priority algorithm in which there's a priority queue based on the closeness to each process' deadline.
         Args:
             ProcessArray (_type_): _description_
         """
