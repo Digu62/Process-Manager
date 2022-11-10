@@ -203,20 +203,22 @@ class ProcessScheduler:
                         continue
                     process.WaitTime += 1
 
-            else: # se o tempo do processo atual tiver acabdo
+            else:
                 print("Overloading")
-                ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess)) # coloca ele no fim da lista
+                ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
-                for process in ReadyList:# aumento o overload para todos
-                    if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
-                        continue
-                    process.WaitTime += 1
-                OverloadTime -= 1
                 if OverloadTime <= 0: # terminando overload
                     OverloadTime = self.Overload
                     ExecutingProcess = None
                     Overloading = False
+                
+                else:
+                    for process in ReadyList:
+                        if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
+                            continue
+                        process.WaitTime += 1
+                    OverloadTime -= 1
               
             for process in CopyArray:
                 process.print_process()        
@@ -308,15 +310,19 @@ class ProcessScheduler:
                 print("Overloading")
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
-                for process in ReadyList:
-                    if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
-                        continue
-                    process.WaitTime += 1
-                OverloadTime -= 1
-                if OverloadTime == 0: # terminando overload
+
+                if OverloadTime <= 0: # terminando overload
                     OverloadTime = self.Overload
                     ExecutingProcess = None
                     Overloading = False
+                
+                else:
+                    for process in ReadyList:
+                        if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
+                            continue
+                        process.WaitTime += 1
+                    OverloadTime -= 1
+                
               
             for process in CopyArray:
                 process.print_process()        

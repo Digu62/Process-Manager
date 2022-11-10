@@ -15,21 +15,8 @@ class MemoryScheduler:
 
         if VMen.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
             return
-
-        if Mem.EmptyPagesNum >= Process.MemoryPages: # a memoria tem espaço vazio
-            for i in range(50):
-                if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
-                    j = 0
-                    for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
-                        VMen.PageList[page].RamAdress = i+j
-                        Mem.PageList[i+j].Process = Process
-                        Mem.PageList[i+j].RencentlyUsed = 50 - j
-                        Mem.PageList[i+j].VirtualMemoryAddress = page
-                        j += 1   
-                    Mem.EmptyPagesNum -= Process.MemoryPages
-                return  
             
-        # se chegou até aqui a memoria ta cheia e o processo não ta nela
+        # a memoria ta cheia e o processo não ta nela
         while Mem.EmptyPagesNum < Process.MemoryPages:
 
             # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
@@ -45,11 +32,23 @@ class MemoryScheduler:
             # - Fernando                                                                                                                # 
             #---------------------------------------------------------------------------------------------------------------------------#
 
+        # a memoria tem espaço vazio
+        for i in range(50):
+            if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
+                j = 0
+                for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
+                    VMen.PageList[page].RamAdress = i+j
+                    Mem.PageList[i+j].Process = Process
+                    Mem.PageList[i+j].RencentlyUsed = 50
+                    Mem.PageList[i+j].VirtualMemoryAddress = page
+                    j += 1   
+                Mem.EmptyPagesNum -= Process.MemoryPages
+            return  
 
         return
 
     def LRU(self,Mem, VMen, Process):
-
+        
         return
 
 
