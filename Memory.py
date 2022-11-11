@@ -17,6 +17,18 @@ class Memory:
         Mem.PageList = self.PageList
         return Mem
 
+    def FindOldest(self): # retorna o processo mais antigo
+
+        Oldest = self.PageList[0]
+
+        for page in self.PageList:
+            if page.Process == None: # assumindo que nunca vai ter um buraco no meio da lista
+                break
+            if page.RecentlyUsed < Oldest.RecentlyUsed:
+                Oldest = page
+
+        return Oldest.Process
+
     def RemoveProcess(self,Process, VMem):
 
         for index, page in np.ndenumerate(self.PageList): # itera sobre as paginas na memoria 
@@ -37,7 +49,7 @@ class Memory:
             # copia do processo para a posiçao do que foi removido
             self.PageList[i-AmmountRemoved].Process = self.PageList[i].Process
             self.PageList[i-AmmountRemoved].VirtualMemoryAddress = self.PageList[i].VirtualMemoryAddress
-            self.PageList[i-AmmountRemoved].RencentlyUsed = self.PageList[i].RencentlyUsed
+            self.PageList[i-AmmountRemoved].RecentlyUsed = self.PageList[i].RecentlyUsed
 
             #atualização na virtual
             VMem.PageList[VMemAdress] = i - AmmountRemoved
@@ -46,4 +58,11 @@ class Memory:
             self.PageList[i].Process = None
             self.PageList[i].VirtualMemoryAddress = -1
 
+        return
+    
+    def Update(self):
+        for page in self.PageList:
+            if page.Process == None: # assumindo que não tem um burcao no meio da memoria
+                break
+            page.RecentlyUsed -= 1
         return

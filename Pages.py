@@ -1,7 +1,7 @@
 class Page:
-    def __init__(self, Process, RencentlyUsed = 50):
+    def __init__(self, Process, RecentlyUsed = 50):
         self.Process = Process
-        self.RencentlyUsed = RencentlyUsed
+        self.RecentlyUsed = RecentlyUsed
         self.VirtualMemoryAddress = -1
 
 class VirtualPage:

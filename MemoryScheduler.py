@@ -29,7 +29,8 @@ class MemoryScheduler:
             # Falta adcionar swap                                                                                                       #
             # RemoveProcess nao guarda no disco                                                                                         #
             # Não acho que é necessario guardar no disco, pois todas as informações que a gente precisa tão guardados no processo em si #
-            # - Fernando                                                                                                                # 
+            # - Fernando    
+            # mas ai que ta, a abstração do disco ta na propia classe do processo + a lista de processos que a gente passsa             # 
             #---------------------------------------------------------------------------------------------------------------------------#
 
         # a memoria tem espaço vazio
@@ -39,7 +40,7 @@ class MemoryScheduler:
                 for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
                     VMen.PageList[page].RamAdress = i+j
                     Mem.PageList[i+j].Process = Process
-                    Mem.PageList[i+j].RencentlyUsed = 50
+                    Mem.PageList[i+j].RecentlyUsed = 50
                     Mem.PageList[i+j].VirtualMemoryAddress = page
                     j += 1   
                 Mem.EmptyPagesNum -= Process.MemoryPages
@@ -48,7 +49,46 @@ class MemoryScheduler:
         return
 
     def LRU(self,Mem, VMen, Process):
+        IndexProcessPages = VMen.FindProcess(Process)
+
+        if VMen.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
+            for index in IndexProcessPages:
+                Adress = VMen.PageList[index].RamAdress
+                Mem.PageList[Adress].RecentlyUsed = 50
+            Mem.Update()
+            return
+            
+        # a memoria ta cheia e o processo não ta nela
+        while Mem.EmptyPagesNum < Process.MemoryPages:
+
+            # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
+            # e os ultimos vao ser colocados no fim
+
         
+            Mem.RemoveProcess(Mem.FindOldest())
+
+            # --------------------------------------------------------------------------------------------------------------------------#
+            # Falta adcionar swap                                                                                                       #
+            # RemoveProcess nao guarda no disco                                                                                         #
+            # Não acho que é necessario guardar no disco, pois todas as informações que a gente precisa tão guardados no processo em si #
+            # - Fernando    
+            # mas ai que ta, a abstração do disco ta na propia classe do processo + a lista de processos que a gente passsa             # 
+            #---------------------------------------------------------------------------------------------------------------------------#
+
+        # a memoria tem espaço vazio
+        for i in range(50):
+            if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
+                j = 0
+                for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
+                    VMen.PageList[page].RamAdress = i+j
+                    Mem.PageList[i+j].Process = Process
+                    Mem.PageList[i+j].RecentlyUsed = 50
+                    Mem.PageList[i+j].VirtualMemoryAddress = page
+                    j += 1   
+                Mem.EmptyPagesNum -= Process.MemoryPages
+            Mem.Update()
+            return  
+        Mem.Update()
         return
 
 
