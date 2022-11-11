@@ -24,6 +24,8 @@ lbl3.place(x=70, y=230)
 ent3 = Entry(justify='center')
 ent3.place(x=200, y=230)
 
+# ola, tem como dar commit pra eu testar a memoria já que eu não posso usar o terminal
+
 def call_open():
     p = int(ent1.get())
     q = int(ent2.get())
