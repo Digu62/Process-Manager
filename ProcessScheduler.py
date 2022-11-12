@@ -189,9 +189,8 @@ class ProcessScheduler:
                             ExecutingProcess = None
                             ProcessCount -= 1        
 
-                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum: # Chega se acabou o tempo dele 
+                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum and self.Overload > 0: # Chega se acabou o tempo dele 
                         ExecutingProcess.ExecutionTimePerQuantum = 0
-                        print("Overloading")
                         Overloading = True        
 
                 except:
@@ -208,17 +207,16 @@ class ProcessScheduler:
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
+                
+                for process in ReadyList:
+                    if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
+                        continue
+                    process.WaitTime += 1
+                OverloadTime -= 1
                 if OverloadTime <= 0: # terminando overload
                     OverloadTime = self.Overload
                     ExecutingProcess = None
                     Overloading = False
-                
-                else:
-                    for process in ReadyList:
-                        if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
-                            continue
-                        process.WaitTime += 1
-                    OverloadTime -= 1
               
             for process in CopyArray:
                 process.print_process()        
@@ -293,9 +291,8 @@ class ProcessScheduler:
                             ExecutingProcess = None
                             ProcessCount -= 1        
 
-                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum:# Chega se acabou o tempo dele 
+                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum and self.Overload > 0:# Chega se acabou o tempo dele 
                         ExecutingProcess.ExecutionTimePerQuantum = 0
-                        print("Overloading")
                         Overloading = True        
 
                 except:
@@ -311,17 +308,16 @@ class ProcessScheduler:
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
+                
+                for process in ReadyList:
+                    if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
+                        continue
+                    process.WaitTime += 1
+                OverloadTime -= 1
                 if OverloadTime <= 0: # terminando overload
                     OverloadTime = self.Overload
                     ExecutingProcess = None
                     Overloading = False
-                
-                else:
-                    for process in ReadyList:
-                        if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
-                            continue
-                        process.WaitTime += 1
-                    OverloadTime -= 1
                 
               
             for process in CopyArray:
@@ -342,20 +338,37 @@ class ProcessScheduler:
 
 if __name__ == "__main__":
 
+    # outros processos
     ProcessA = Process.process(0,4,7,0,0,1)
     ProcessB = Process.process(2,2,3,0,0,2)
     ProcessC = Process.process(4,1,5,0,0,3)
     ProcessD = Process.process(6,3,10,0,0,4)
 
-    ProcessA.print_process()
 
+    # processos da prova
+    Process1 = Process.process(0,4,35,0,0,1)
+    Process2 = Process.process(3,2,15,0,0,2)
+    Process3 = Process.process(6,7,20,0,0,3)
+    Process4 = Process.process(9,8,25,0,0,4)
+
+    # outros processos
     ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
+
+    # processos da prova
+    ProcessArray1 = np.array([Process1,Process2,Process3,Process4,])
 
     scheduler = ProcessScheduler(2 , 1)
 
-    scheduler.FIFO(ProcessArray)
+    #scheduler.FIFO(ProcessArray)
     #scheduler.Sjf(ProcessArray)
 
     #scheduler.RoundRobin(ProcessArray)
 
     #scheduler.Edf(ProcessArray)
+
+    #scheduler.FIFO(ProcessArray1)
+    #scheduler.Sjf(ProcessArray1)
+
+    #scheduler.RoundRobin(ProcessArray1)
+
+    scheduler.Edf(ProcessArray1)

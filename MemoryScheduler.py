@@ -23,7 +23,7 @@ class MemoryScheduler:
             # e os ultimos vao ser colocados no fim
 
         
-            Mem.RemoveProcess(Mem.PageList[0].Process)
+            Mem.RemoveProcess(Mem.PageList[0].Process,VMem)
 
             # --------------------------------------------------------------------------------------------------------------------------#
             # Falta adcionar swap                                                                                                       #
@@ -44,7 +44,7 @@ class MemoryScheduler:
                     Mem.PageList[i+j].VirtualMemoryAddress = page
                     j += 1   
                 Mem.EmptyPagesNum -= Process.MemoryPages
-            return  
+                return  
 
         return
 
@@ -64,8 +64,8 @@ class MemoryScheduler:
             # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
             # e os ultimos vao ser colocados no fim
 
-        
-            Mem.RemoveProcess(Mem.FindOldest())
+            a = Mem.FindOldest()
+            Mem.RemoveProcess(a, VMem)
 
             # --------------------------------------------------------------------------------------------------------------------------#
             # Falta adcionar swap                                                                                                       #
@@ -86,18 +86,18 @@ class MemoryScheduler:
                     Mem.PageList[i+j].VirtualMemoryAddress = page
                     j += 1   
                 Mem.EmptyPagesNum -= Process.MemoryPages
-            Mem.Update()
-            return  
+                Mem.Update()
+                return  
         Mem.Update()
         return
 
 
 if __name__ == "__main__":
 
-    ProcessA = Process.process(0,4,7,0,5,1)
-    ProcessB = Process.process(2,2,3,0,5,2)
-    ProcessC = Process.process(4,1,5,0,5,3)
-    ProcessD = Process.process(6,3,10,0,5,4)
+    ProcessA = Process.process(0,4,7,0,17,1)
+    ProcessB = Process.process(2,2,3,0,17,2)
+    ProcessC = Process.process(4,1,5,0,17,3)
+    ProcessD = Process.process(6,3,10,0,17,4)
 
 
     ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
@@ -106,7 +106,17 @@ if __name__ == "__main__":
     Mem = Memory.Memory()
     VMem = VirtualMemory.VirtualMemory(ProcessArray)
 
+    """ scheduler.FIFO(Mem, VMem, ProcessA)
     scheduler.FIFO(Mem, VMem, ProcessB)
+    scheduler.FIFO(Mem, VMem, ProcessA)
+    scheduler.FIFO(Mem, VMem, ProcessD)
+    scheduler.FIFO(Mem, VMem, ProcessC) """
+
+    scheduler.LRU(Mem, VMem, ProcessA)
+    scheduler.LRU(Mem, VMem, ProcessB)
+    scheduler.LRU(Mem, VMem, ProcessA)
+    scheduler.LRU(Mem, VMem, ProcessD)
+    scheduler.LRU(Mem, VMem, ProcessC)
 
     print("a")
     print("a")

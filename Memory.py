@@ -39,10 +39,12 @@ class Memory:
                 LastIndex = index[0]
 
         self.EmptyPagesNum += Process.MemoryPages
-        self.Defrag(LastIndex, Process.MemoryPages, VMem)
+        self.Defrag(LastIndex + 1, Process.MemoryPages, VMem)
         return
 
     def Defrag(self, LastIndex, AmmountRemoved, VMem):
+        print("Last index " + str(LastIndex))
+        print("AmmountRemoved " + str(AmmountRemoved))
         for i in range(LastIndex , 50):
             VMemAdress = self.PageList[i].VirtualMemoryAddress
 
@@ -52,7 +54,7 @@ class Memory:
             self.PageList[i-AmmountRemoved].RecentlyUsed = self.PageList[i].RecentlyUsed
 
             #atualização na virtual
-            VMem.PageList[VMemAdress] = i - AmmountRemoved
+            VMem.PageList[VMemAdress].RamAdress = i - AmmountRemoved
             
             # Remoção do princiapl
             self.PageList[i].Process = None
