@@ -19,7 +19,7 @@ class ProcessScheduler:
         return Turnaround/ProcessList.size
 
     # Escalonamento
-    def FIFO(self, ProcessArray, Mem, VMem, MemAlgo):
+    def FIFO(self, ProcessArray, MemAlgo):
         """This function implement the first in first out (FIFO) algorithm. 
         It's a no preemptive algorithm in which the CPU executes in order the process that arrive.
 
@@ -37,6 +37,10 @@ class ProcessScheduler:
         ExecutingProcess = None #Process in execution
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
+
+        Mem = Memory.Memory()
+        VMem = VirtualMemory.VirtualMemory(CopyArray)
+
         #execuçao dos processos
         while ProcessCount != 0:
 
@@ -87,7 +91,7 @@ class ProcessScheduler:
         return
 
 
-    def Sjf(self, ProcessArray, Mem, VMem, MemAlgo):
+    def Sjf(self, ProcessArray, MemAlgo):
         """This function implement the shortest job first algorithm
         It's a no preemptive algorithm in which the scheduler choses the process with the smallest execution time for the next execution.
 
@@ -105,6 +109,9 @@ class ProcessScheduler:
         ExecutingProcess = None
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
+
+        Mem = Memory.Memory()
+        VMem = VirtualMemory.VirtualMemory(CopyArray)
 
         #execuçao dos processos
         while ProcessCount != 0:
@@ -160,7 +167,7 @@ class ProcessScheduler:
         return
 
 
-    def RoundRobin(self, ProcessArray, Mem, VMem, MemAlgo):
+    def RoundRobin(self, ProcessArray, MemAlgo):
         """This function implement the round robin algorithm
         It's a preemptive algorithm in which time slices (quanta) are assigned to each process in equal portions and circular order.
 
@@ -183,6 +190,9 @@ class ProcessScheduler:
         OverloadTime = self.Overload
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
+
+        Mem = Memory.Memory()
+        VMem = VirtualMemory.VirtualMemory(CopyArray)
         #execuçao dos processos
         while ProcessCount != 0:
 
@@ -260,7 +270,7 @@ class ProcessScheduler:
         print("----------------------------------")
         return
 
-    def Edf(self, ProcessArray, Mem, VMem, MemAlgo):
+    def Edf(self, ProcessArray, MemAlgo):
         """This function implement the earliest deadline first algorithm
         It's a dynamic priority algorithm in which there's a priority queue based on the closeness to each process' deadline.
         Args:
@@ -282,6 +292,9 @@ class ProcessScheduler:
         OverloadTime = self.Overload
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
+
+        Mem = Memory.Memory()
+        VMem = VirtualMemory.VirtualMemory(CopyArray)
 
         #execuçao dos processos
         while ProcessCount != 0:
@@ -379,17 +392,17 @@ class ProcessScheduler:
 if __name__ == "__main__":
 
     # outros processos
-    ProcessA = Process.process(0,4,7,0,0,1)
-    ProcessB = Process.process(2,2,3,0,0,2)
-    ProcessC = Process.process(4,1,5,0,0,3)
-    ProcessD = Process.process(6,3,10,0,0,4)
+    ProcessA = Process.process(0,4,7,0,1,1)
+    ProcessB = Process.process(2,2,3,0,1,2)
+    ProcessC = Process.process(4,1,5,0,1,3)
+    ProcessD = Process.process(6,3,10,0,1,4)
 
 
     # processos da prova
-    Process1 = Process.process(0,4,35,0,0,1)
-    Process2 = Process.process(3,2,15,0,0,2)
-    Process3 = Process.process(6,7,20,0,0,3)
-    Process4 = Process.process(9,8,25,0,0,4)
+    Process1 = Process.process(0,4,35,0,1,1)
+    Process2 = Process.process(3,2,15,0,1,2)
+    Process3 = Process.process(6,7,20,0,1,3)
+    Process4 = Process.process(9,8,25,0,1,4)
 
     # outros processos
     ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
@@ -397,22 +410,23 @@ if __name__ == "__main__":
     # processos da prova
     ProcessArray1 = np.array([Process1,Process2,Process3,Process4,])
 
+    MemAlgo = 1 # 1 = fifo , 2 = lru
+
+    
     scheduler = ProcessScheduler(2 , 1)
 
-    Mem = Memory.Memory()
-    VMem = VirtualMemory.VirtualMemory()
+    
 
+    #scheduler.FIFO(ProcessArray, MemAlgo)
+    #scheduler.Sjf(ProcessArray, MemAlgo)
 
-    scheduler.FIFO(ProcessArray)
-    scheduler.Sjf(ProcessArray)
+    #scheduler.RoundRobin(ProcessArray, MemAlgo)
 
-    scheduler.RoundRobin(ProcessArray)
+    #scheduler.Edf(ProcessArray, MemAlgo)
 
-    scheduler.Edf(ProcessArray)
+    #scheduler.FIFO(ProcessArray1, MemAlgo)
+    #scheduler.Sjf(ProcessArray1, MemAlgo)
 
-    scheduler.FIFO(ProcessArray1)
-    scheduler.Sjf(ProcessArray1)
+    scheduler.RoundRobin(ProcessArray1, MemAlgo)
 
-    scheduler.RoundRobin(ProcessArray1)
-
-    scheduler.Edf(ProcessArray1)
+    #scheduler.Edf(ProcessArray1, MemAlgo)
