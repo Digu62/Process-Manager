@@ -9,7 +9,7 @@ class process:
         self.Priority = Priority
         self.ProcessId = ProcessId
         self.MemoryPages = MemoryPages
-        self.MemorySize = 4 # mudar para 4098 ?
+        # self.MemorySize = 4 # mudar para 4098 ?
         self.MetDeadline = True
 
     def clone(self):
@@ -23,7 +23,7 @@ class process:
         proc.Deadline = self.Deadline
         proc.Priority = self.Priority
         proc.MemoryPages = self.MemoryPages
-        proc.MemorySize = self.MemorySize
+        #proc.MemorySize = self.MemorySize
         proc.MetDeadline = self.MetDeadline
         return proc
 
@@ -31,13 +31,17 @@ class process:
         # aqui da pra quebra linha
         # no de baixo não
         # qual usar ?(- Fernando)
-        print(  "ProcessId: " + str(self.ProcessId) +
-                " Chegada: " + str(self.StartTime) + 
-                " Job: " + str(self.ExecutionTime) + 
-                " Tempo executado : " + str(self.ExecutedTime) + 
-                " Tempo de Espera : " + str(self.WaitTime) + 
-                ("   Estourou Deadline" if not self.MetDeadline else "") )        
+        # print(  "ProcessId: " + str(self.ProcessId) +
+        #         " Chegada: " + str(self.StartTime) + 
+        #         " Job: " + str(self.ExecutionTime) + 
+        #         " Tempo executado : " + str(self.ExecutedTime) + 
+        #         " Tempo de Espera : " + str(self.WaitTime) + 
+        #         ("   Estourou Deadline" if not self.MetDeadline else "") )        
 
         #print em uma linha
-        #print(f"Id: {str(self.ProcessId)} Chegada: {str(self.StartTime)} Job: {str(self.ExecutionTime)} Tempo executado: {str(self.ExecutedTime)} Tempo de Espera: {str(self.WaitTime)}")       
+        print(  f"ProcessId: {str(self.ProcessId)}" 
+                f" Chegada: {str(self.StartTime)}" 
+                f" Job: {str(self.ExecutionTime)}"
+                f" Tempo executado: {str(self.ExecutedTime)}" 
+                f" Tempo de Espera: {str(self.WaitTime)}")       
         return

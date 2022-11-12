@@ -13,6 +13,15 @@ class ProcessScheduler:
         self.Overload = Overload
 
     def TurnAround(self, ProcessList):
+        """The Turnaround is the time that the process wait to ending, counting
+        his execution, the execution before he and other factors.
+
+        Args:
+            ProcessList (_type_): A list with process
+
+        Returns:
+            _type_: Returns the turnaround of the process list
+        """
         Turnaround = 0
         for process in ProcessList:
             Turnaround += process.WaitTime + process.ExecutionTime
@@ -34,7 +43,9 @@ class ProcessScheduler:
         WorkingList = np.array(CopyArray) #List with process to be executed
         TotalTime = 0
         ProcessCount = CopyArray.size
-        ExecutingProcess = None #Process in execution
+        ExecutingProcess = None #Process in execution   
+        ReadyList = np.array([])
+
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
@@ -43,10 +54,15 @@ class ProcessScheduler:
 
         #execuçao dos processos
         while ProcessCount != 0:
-
+            
+            for process in WorkingList: # so coloca na lista de prontos se já chegou
+                if process.StartTime <= TotalTime:
+                    ReadyList = np.append(ReadyList, process)
+                    WorkingList = np.delete(WorkingList, np.where(WorkingList == process))
+            
             #Escolhe o proximo
             if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
-                for process in WorkingList:
+                for process in ReadyList:
                     if process.StartTime <= TotalTime: # escolhe o primeiro caso alguem ja tenho chegado
                         ExecutingProcess = process
                         # escolhendo algo de memoria
@@ -63,14 +79,14 @@ class ProcessScheduler:
                 ExecutingProcess.ExecutedTime += 1
 
                 if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
-                        WorkingList = np.delete(WorkingList, np.where(WorkingList == ExecutingProcess))
+                        ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                         ExecutingProcess = None
                         ProcessCount -= 1
             except:
                 pass
 
             #Tempo de espera para calculo de turnaround
-            for process in WorkingList:
+            for process in ReadyList:
                 if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                     continue
                 process.WaitTime += 1
@@ -107,6 +123,7 @@ class ProcessScheduler:
         TotalTime = 0
         ProcessCount = CopyArray.size
         ExecutingProcess = None
+        ReadyList = np.array([])
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
@@ -115,25 +132,28 @@ class ProcessScheduler:
 
         #execuçao dos processos
         while ProcessCount != 0:
+
+            for process in WorkingList: # so coloca na lista de prontos se já chegou
+                if process.StartTime <= TotalTime:
+                    ReadyList = np.append(ReadyList, process)
+                    WorkingList = np.delete(WorkingList, np.where(WorkingList == process))
+
             #Escolhe o proximo
             if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
-                for process in WorkingList:
+                for process in ReadyList:
                     if process.StartTime <= TotalTime : # so escolhe o proximo caso alguem ja tenho chegado
                         if ExecutingProcess == None: # escolhe o 1 para comparação
                             ExecutingProcess = process
-                            # escolhendo algo de memoria
-                            if MemAlgo == 1:
-                                MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
-                            else:
-                                MemScheduler.LRU(Mem, VMem, ExecutingProcess)
                         else: # encontra o com menor job dos que ja chegaram
                             if process.ExecutionTime - process.ExecutedTime  < ExecutingProcess.ExecutionTime - ExecutingProcess.ExecutedTime:
                                 ExecutingProcess = process
-                                # escolhendo algo de memoria
-                                if MemAlgo == 1:
-                                    MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
-                                else:
-                                    MemScheduler.LRU(Mem, VMem, ExecutingProcess)
+
+            if ExecutingProcess != None:
+                # escolhendo algo de memoria
+                if MemAlgo == 1:
+                    MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                else:
+                    MemScheduler.LRU(Mem, VMem, ExecutingProcess)
 
             TotalTime += 1
             print("Tempo atual:" + str(TotalTime))
@@ -142,13 +162,13 @@ class ProcessScheduler:
                 ExecutingProcess.ExecutedTime += 1
 
                 if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
-                        WorkingList = np.delete(WorkingList, np.where(WorkingList == ExecutingProcess))
+                        ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                         ExecutingProcess = None
                         ProcessCount -= 1
             except:
                 pass
             #Tempo de espera para calculo de turnaround
-            for process in WorkingList:
+            for process in ReadyList:
                 if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                     continue
                 process.WaitTime += 1
@@ -310,22 +330,16 @@ class ProcessScheduler:
                     if process.StartTime <= TotalTime : # so escolhe o proximo caso alguem ja tenho chegado
                         if ExecutingProcess == None: # escolhe o 1 para comparação
                             ExecutingProcess = process
-
-                            # escolhendo algo de memoria
-                            if MemAlgo == 1:
-                                MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
-                            else:
-                                MemScheduler.LRU(Mem, VMem, ExecutingProcess)
-
                         else: # encontra o deadline mais ceda dos que ja chegaram
                             if process.Deadline - (TotalTime - process.StartTime)  < ExecutingProcess.Deadline - (TotalTime - ExecutingProcess.StartTime):
                                 ExecutingProcess = process
 
-                                # escolhendo algo de memoria
-                                if MemAlgo == 1:
-                                    MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
-                                else:
-                                    MemScheduler.LRU(Mem, VMem, ExecutingProcess)
+            if ExecutingProcess != None:
+                # escolhendo algo de memoria
+                if MemAlgo == 1:
+                    MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                else:
+                    MemScheduler.LRU(Mem, VMem, ExecutingProcess)
 
             TotalTime += 1
             print("Tempo atual:" + str(TotalTime))
@@ -411,11 +425,8 @@ if __name__ == "__main__":
     ProcessArray1 = np.array([Process1,Process2,Process3,Process4,])
 
     MemAlgo = 1 # 1 = fifo , 2 = lru
-
     
     scheduler = ProcessScheduler(2 , 1)
-
-    
 
     #scheduler.FIFO(ProcessArray, MemAlgo)
     #scheduler.Sjf(ProcessArray, MemAlgo)

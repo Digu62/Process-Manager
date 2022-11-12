@@ -18,20 +18,9 @@ class MemoryScheduler:
             
         # a memoria ta cheia e o processo não ta nela
         while Mem.EmptyPagesNum < Process.MemoryPages:
-
             # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
-            # e os ultimos vao ser colocados no fim
-
-        
+            # e os ultimos vao ser colocados no fim  
             Mem.RemoveProcess(Mem.PageList[0].Process,VMem)
-
-            # --------------------------------------------------------------------------------------------------------------------------#
-            # Falta adcionar swap                                                                                                       #
-            # RemoveProcess nao guarda no disco                                                                                         #
-            # Não acho que é necessario guardar no disco, pois todas as informações que a gente precisa tão guardados no processo em si #
-            # - Fernando    
-            # mas ai que ta, a abstração do disco ta na propia classe do processo + a lista de processos que a gente passsa             # 
-            #---------------------------------------------------------------------------------------------------------------------------#
 
         # a memoria tem espaço vazio
         for i in range(50):
@@ -60,20 +49,11 @@ class MemoryScheduler:
             
         # a memoria ta cheia e o processo não ta nela
         while Mem.EmptyPagesNum < Process.MemoryPages:
-
             # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
             # e os ultimos vao ser colocados no fim
-
             a = Mem.FindOldest()
             Mem.RemoveProcess(a, VMem)
 
-            # --------------------------------------------------------------------------------------------------------------------------#
-            # Falta adcionar swap                                                                                                       #
-            # RemoveProcess nao guarda no disco                                                                                         #
-            # Não acho que é necessario guardar no disco, pois todas as informações que a gente precisa tão guardados no processo em si #
-            # - Fernando    
-            # mas ai que ta, a abstração do disco ta na propia classe do processo + a lista de processos que a gente passsa             # 
-            #---------------------------------------------------------------------------------------------------------------------------#
 
         # a memoria tem espaço vazio
         for i in range(50):

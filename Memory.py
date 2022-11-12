@@ -8,7 +8,7 @@ class Memory:
         for i in range(50):
             Page.append(Pages.Page(None))
         self.PageList = np.array(Page) # Array com cada pagina                   
-        self.EmptyPagesNum = 50
+        self.EmptyPagesNum = 50 # número de págicas vazias
 
     def clone(self):
         Mem = Memory()
@@ -32,6 +32,9 @@ class Memory:
     def RemoveProcess(self,Process, VMem):
 
         for index, page in np.ndenumerate(self.PageList): # itera sobre as paginas na memoria 
+            if page.Process == None: # assumindo que não tem um buraco no meio da memoria
+                break
+
             if page.Process == Process: # se encontrar o processo 
                 VMem.PageList[page.VirtualMemoryAddress].RamAdress = -1 # tira a referencia na memoria vi
                 page.VirtualMemoryAddress = -1
@@ -43,8 +46,6 @@ class Memory:
         return
 
     def Defrag(self, LastIndex, AmmountRemoved, VMem):
-        print("Last index " + str(LastIndex))
-        print("AmmountRemoved " + str(AmmountRemoved))
         for i in range(LastIndex , 50):
             VMemAdress = self.PageList[i].VirtualMemoryAddress
 
