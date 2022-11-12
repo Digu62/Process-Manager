@@ -19,14 +19,11 @@ def open_win(window,p,q,o):
             counter=0
             j+=1
         txt1 = Label(newWindow, text='Processo: {}'.format(i+1), font=17)
-        txt1.place(x=150+j*300, y=15+((i+1-(j*10))*90))
+        txt1.place(x=150+j*300, y=((i+1-(j*10))*90))
         txt2 = Label(newWindow, text='Inicio do processo:')
-        txt2.place(x=100+j*300, y=50+((i+1-(j*10))*90))
+        txt2.place(x=100+j*300, y=35+((i+1-(j*10))*90))
 
         btn = Entry(newWindow,justify='center')
-        btn.place(x=220+j*300, y=50+((i+1-(j*10))*90))
+        btn.place(x=220+j*300, y=35+((i+1-(j*10))*90))
         counter+=1
     
-    w_scroll = Scrollbar(newWindow)
-    w_scroll.pack(side=RIGHT, fill=Y)
-    w_scroll.config(command=multiple_yview)
