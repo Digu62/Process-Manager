@@ -21,7 +21,7 @@ def open_win(window,p,q,o):
     
     
     #canvas config
-    canvas.configura(yscrollcommand=scroll.set)
+    canvas.configure(yscrollcommand=scroll.set)
     canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
 
     #segundo frame
@@ -36,7 +36,7 @@ def open_win(window,p,q,o):
         if counter==10:
             counter=0
             j+=1
-        Label(frame2, text=f'Processo(Id): {i}'.grid(row=i, column=0, pady=10, padx=10))
+        Label(frame2, text=f'Processo(Id): {i}').grid(row=i, column=0, pady=10, padx=10)
         Label(frame2, text='Inicio do processo:')
         Label(frame2, text='Tempo de execução:')
         Label(frame2, text='Deadline:')
