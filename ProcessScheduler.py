@@ -1,5 +1,8 @@
 import Process
 import numpy as np
+import MemoryScheduler
+import Memory
+import VirtualMemory
 
 class ProcessScheduler:
     
@@ -16,7 +19,7 @@ class ProcessScheduler:
         return Turnaround/ProcessList.size
 
     # Escalonamento
-    def FIFO(self, ProcessArray):
+    def FIFO(self, ProcessArray, Mem, VMem, MemAlgo):
         """This function implement the first in first out (FIFO) algorithm. 
         It's a no preemptive algorithm in which the CPU executes in order the process that arrive.
 
@@ -33,6 +36,7 @@ class ProcessScheduler:
         ProcessCount = CopyArray.size
         ExecutingProcess = None #Process in execution
 
+        MemScheduler = MemoryScheduler.MemoryScheduler()
         #execuçao dos processos
         while ProcessCount != 0:
 
@@ -41,6 +45,11 @@ class ProcessScheduler:
                 for process in WorkingList:
                     if process.StartTime <= TotalTime: # escolhe o primeiro caso alguem ja tenho chegado
                         ExecutingProcess = process
+                        # escolhendo algo de memoria
+                        if MemAlgo == 1:
+                            MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                        else:
+                            MemScheduler.LRU(Mem, VMem, ExecutingProcess)
                         break
 
             TotalTime += 1
@@ -78,7 +87,7 @@ class ProcessScheduler:
         return
 
 
-    def Sjf(self, ProcessArray):
+    def Sjf(self, ProcessArray, Mem, VMem, MemAlgo):
         """This function implement the shortest job first algorithm
         It's a no preemptive algorithm in which the scheduler choses the process with the smallest execution time for the next execution.
 
@@ -95,6 +104,8 @@ class ProcessScheduler:
         ProcessCount = CopyArray.size
         ExecutingProcess = None
 
+        MemScheduler = MemoryScheduler.MemoryScheduler()
+
         #execuçao dos processos
         while ProcessCount != 0:
             #Escolhe o proximo
@@ -103,9 +114,19 @@ class ProcessScheduler:
                     if process.StartTime <= TotalTime : # so escolhe o proximo caso alguem ja tenho chegado
                         if ExecutingProcess == None: # escolhe o 1 para comparação
                             ExecutingProcess = process
+                            # escolhendo algo de memoria
+                            if MemAlgo == 1:
+                                MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                            else:
+                                MemScheduler.LRU(Mem, VMem, ExecutingProcess)
                         else: # encontra o com menor job dos que ja chegaram
                             if process.ExecutionTime - process.ExecutedTime  < ExecutingProcess.ExecutionTime - ExecutingProcess.ExecutedTime:
                                 ExecutingProcess = process
+                                # escolhendo algo de memoria
+                                if MemAlgo == 1:
+                                    MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                                else:
+                                    MemScheduler.LRU(Mem, VMem, ExecutingProcess)
 
             TotalTime += 1
             print("Tempo atual:" + str(TotalTime))
@@ -139,7 +160,7 @@ class ProcessScheduler:
         return
 
 
-    def RoundRobin(self, ProcessArray):
+    def RoundRobin(self, ProcessArray, Mem, VMem, MemAlgo):
         """This function implement the round robin algorithm
         It's a preemptive algorithm in which time slices (quanta) are assigned to each process in equal portions and circular order.
 
@@ -161,6 +182,7 @@ class ProcessScheduler:
         Overloading = False
         OverloadTime = self.Overload
 
+        MemScheduler = MemoryScheduler.MemoryScheduler()
         #execuçao dos processos
         while ProcessCount != 0:
 
@@ -173,6 +195,11 @@ class ProcessScheduler:
             if ExecutingProcess == None: # escolhe o primeiro dos prontos se nenhum estiver sendo executado
                 for process in ReadyList:
                     ExecutingProcess = process
+                    # escolhendo algo de memoria
+                    if MemAlgo == 1:
+                        MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                    else:
+                        MemScheduler.LRU(Mem, VMem, ExecutingProcess)
                     break
 
             TotalTime += 1
@@ -233,7 +260,7 @@ class ProcessScheduler:
         print("----------------------------------")
         return
 
-    def Edf(self, ProcessArray):
+    def Edf(self, ProcessArray, Mem, VMem, MemAlgo):
         """This function implement the earliest deadline first algorithm
         It's a dynamic priority algorithm in which there's a priority queue based on the closeness to each process' deadline.
         Args:
@@ -254,6 +281,8 @@ class ProcessScheduler:
         Overloading = False
         OverloadTime = self.Overload
 
+        MemScheduler = MemoryScheduler.MemoryScheduler()
+
         #execuçao dos processos
         while ProcessCount != 0:
 
@@ -263,16 +292,27 @@ class ProcessScheduler:
                     WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == process))
             
 
-
-
             if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
                 for process in ReadyList:
                     if process.StartTime <= TotalTime : # so escolhe o proximo caso alguem ja tenho chegado
                         if ExecutingProcess == None: # escolhe o 1 para comparação
                             ExecutingProcess = process
+
+                            # escolhendo algo de memoria
+                            if MemAlgo == 1:
+                                MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                            else:
+                                MemScheduler.LRU(Mem, VMem, ExecutingProcess)
+
                         else: # encontra o deadline mais ceda dos que ja chegaram
                             if process.Deadline - (TotalTime - process.StartTime)  < ExecutingProcess.Deadline - (TotalTime - ExecutingProcess.StartTime):
                                 ExecutingProcess = process
+
+                                # escolhendo algo de memoria
+                                if MemAlgo == 1:
+                                    MemScheduler.FIFO(Mem, VMem, ExecutingProcess)
+                                else:
+                                    MemScheduler.LRU(Mem, VMem, ExecutingProcess)
 
             TotalTime += 1
             print("Tempo atual:" + str(TotalTime))
@@ -359,16 +399,20 @@ if __name__ == "__main__":
 
     scheduler = ProcessScheduler(2 , 1)
 
-    #scheduler.FIFO(ProcessArray)
-    #scheduler.Sjf(ProcessArray)
+    Mem = Memory.Memory()
+    VMem = VirtualMemory.VirtualMemory()
 
-    #scheduler.RoundRobin(ProcessArray)
 
-    #scheduler.Edf(ProcessArray)
+    scheduler.FIFO(ProcessArray)
+    scheduler.Sjf(ProcessArray)
 
-    #scheduler.FIFO(ProcessArray1)
-    #scheduler.Sjf(ProcessArray1)
+    scheduler.RoundRobin(ProcessArray)
 
-    #scheduler.RoundRobin(ProcessArray1)
+    scheduler.Edf(ProcessArray)
+
+    scheduler.FIFO(ProcessArray1)
+    scheduler.Sjf(ProcessArray1)
+
+    scheduler.RoundRobin(ProcessArray1)
 
     scheduler.Edf(ProcessArray1)
