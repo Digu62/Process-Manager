@@ -1,6 +1,8 @@
-import numpy as np
 from tkinter import *
 from func_main import *
+
+memoryWindow()
+exit()
 
 window = Tk()
 window.title('Escalonador de Processos e Memória')
@@ -39,5 +41,6 @@ def call_open():
 
 btn1 = Button(window,text ="Avançar",command = call_open)
 btn1.place(x=170, y=230)
+
 
 window.mainloop()
