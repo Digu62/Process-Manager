@@ -80,6 +80,10 @@ def memoryWindow():
     #new frame -> canvas
     canvas.create_window((0,0), window=frame2, anchor='n')
 
+
+
+
+
     # code for creating table
     n_rows = 50 #Will receive this values
     n_columns = 2 #Will receive this values
@@ -97,7 +101,13 @@ def memoryWindow():
         lst.append(insert)
         counter += 1
     
-    for i in range(math.floor(n_rows/2)):
+    FirstHalf = math.floor(n_rows/2)
+    SecondHalf = math.ceil(n_rows/2)
+
+
+    # Memoria principal
+
+    for i in range(FirstHalf):
         for j in range(n_columns):
             table = Entry(frame2, width=3, fg='black',
                             font=('Arial',16,'bold'))
@@ -105,29 +115,36 @@ def memoryWindow():
             table.grid(row=i, column=j) 
             table.insert(END,lst[i][j])
     
-    for i in range(math.ceil(n_rows/2),n_rows):
+    for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
             table = Entry(frame2, width=3, fg='black',
                             font=('Arial',16,'bold'))
 
-            table.grid(row=i-math.ceil(n_rows/2), column=j+3) 
+            table.grid(row=i-SecondHalf, column=j+2) 
             table.insert(END,lst[i][j])
 
-    for i in range(math.floor(n_rows/2)):
-        for j in range(n_columns):
+
+    # Memoria virtual
+    k = 5
+    for i in range(FirstHalf): #rows
+        for j in range(n_columns): # columns
             table = Entry(frame2, width=3, fg='black',
                             font=('Arial',16,'bold'))
 
-            table.grid(row=i, column=j) 
+            if j == 0:
+                table.grid(row=i, column=j+k, padx=(300,0) ) 
+            else:
+                table.grid(row=i, column=j+k ) 
             table.insert(END,lst[i][j])
     
-    for i in range(math.ceil(n_rows/2),n_rows):
+    for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
             table = Entry(frame2, width=3, fg='black',
                             font=('Arial',16,'bold'))
 
-            table.grid(row=i-math.ceil(n_rows/2), column=j+3) 
+            table.grid(row=i-SecondHalf, column=j+k+2) 
             table.insert(END,lst[i][j])
+
     
         
     memory_window.mainloop()
