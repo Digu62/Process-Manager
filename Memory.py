@@ -8,7 +8,7 @@ class Memory:
         for i in range(50):
             Page.append(Pages.Page(None))
         self.PageList = np.array(Page) # Array com cada pagina                   
-        self.EmptyPagesNum = 50 # número de págicas vazias
+        self.EmptyPagesNum = 50 # número de paginas vazias
 
     def clone(self):
         Mem = Memory()
@@ -29,7 +29,7 @@ class Memory:
 
         return Oldest.Process
 
-    def RemoveProcess(self,Process, VMem):
+    def RemoveProcess(self,Process, VMem): #remove um processo especifico
 
         for index, page in np.ndenumerate(self.PageList): # itera sobre as paginas na memoria 
             if page.Process == None: # assumindo que não tem um buraco no meio da memoria
@@ -37,15 +37,15 @@ class Memory:
 
             if page.Process == Process: # se encontrar o processo 
                 VMem.PageList[page.VirtualMemoryAddress].RamAdress = -1 # tira a referencia na memoria vi
-                page.VirtualMemoryAddress = -1
-                page.Process = None
+                page.VirtualMemoryAddress = -1 # tambem remove a referencia na pagina da memoria
+                page.Process = None #remove o processo da pagina da memoria
                 LastIndex = index[0]
 
         self.EmptyPagesNum += Process.MemoryPages
-        self.Defrag(LastIndex + 1, Process.MemoryPages, VMem)
+        self.Defrag(LastIndex + 1, Process.MemoryPages, VMem) # chama o defrag para remover espaços vazios
         return
 
-    def Defrag(self, LastIndex, AmmountRemoved, VMem):
+    def Defrag(self, LastIndex, AmmountRemoved, VMem): # reposiciona os processos na memoria a fim de evitar espaços vazios
         for i in range(LastIndex , 50):
             VMemAdress = self.PageList[i].VirtualMemoryAddress
 
@@ -54,7 +54,7 @@ class Memory:
             self.PageList[i-AmmountRemoved].VirtualMemoryAddress = self.PageList[i].VirtualMemoryAddress
             self.PageList[i-AmmountRemoved].RecentlyUsed = self.PageList[i].RecentlyUsed
 
-            #atualização na virtual
+            # atualização na virtual
             VMem.PageList[VMemAdress].RamAdress = i - AmmountRemoved
             
             # Remoção do princiapl
@@ -63,7 +63,7 @@ class Memory:
 
         return
     
-    def Update(self):
+    def Update(self): # modifica a contagem da última vez que o processo foi utilizado
         for page in self.PageList:
             if page.Process == None: # assumindo que não tem um burcao no meio da memoria
                 break
