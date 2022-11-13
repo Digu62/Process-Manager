@@ -15,14 +15,16 @@ class MemoryScheduler:
 
         if VMen.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
             return
-            
+        
+        # por padrão o procceso que chegou primeiro é colocado no começo, já que é o fifo
+        # e os ultimos vao ser colocados no final  
+        
         # a memoria ta cheia e o processo não ta nela
         while Mem.EmptyPagesNum < Process.MemoryPages:
-            # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
-            # e os ultimos vao ser colocados no fim  
+            
             Mem.RemoveProcess(Mem.PageList[0].Process,VMem)
 
-        # a memoria tem espaço vazio
+        # a memoria tem espaço vazio ou estava cheia mas um processo ja foi removido
         for i in range(50):
             if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
                 j = 0
@@ -44,18 +46,16 @@ class MemoryScheduler:
             for index in IndexProcessPages:
                 Adress = VMen.PageList[index].RamAdress
                 Mem.PageList[Adress].RecentlyUsed = 50
-            Mem.Update()
+            Mem.Update() # atualiza a ultima vez que cada processo foi utilizado
             return
             
         # a memoria ta cheia e o processo não ta nela
         while Mem.EmptyPagesNum < Process.MemoryPages:
-            # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
-            # e os ultimos vao ser colocados no fim
             a = Mem.FindOldest()
             Mem.RemoveProcess(a, VMem)
 
 
-        # a memoria tem espaço vazio
+        # a memoria tem espaço vazio ou estava cheia mas um processo já foi removido
         for i in range(50):
             if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
                 j = 0
@@ -66,9 +66,9 @@ class MemoryScheduler:
                     Mem.PageList[i+j].VirtualMemoryAddress = page
                     j += 1   
                 Mem.EmptyPagesNum -= Process.MemoryPages
-                Mem.Update()
+                Mem.Update() # atualiza a ultima vez que cada processo foi utilizado
                 return  
-        Mem.Update()
+        Mem.Update() # atualiza a ultima vez que cada processo foi utilizado
         return
 
 
