@@ -40,8 +40,8 @@ class ProcessScheduler:
         for process in ProcessArray: # copia pq python é so por referencia
             CopyArray = np.append(CopyArray, process.clone() )
 
-        WorkingList = np.array(CopyArray) #List with process to be executed
-        TotalTime = 0
+        WorkingList = np.array(CopyArray) # lista de processos que serão executados, mas talvez ainda não esteja prontos
+        TotalTime = 0 # conta o tempo decorrido
         ProcessCount = CopyArray.size
         ExecutingProcess = None #Process in execution   
         ReadyList = np.array([])
@@ -119,11 +119,11 @@ class ProcessScheduler:
         for process in ProcessArray: # copia pq python é so por referencia
             CopyArray = np.append(CopyArray, process.clone() )
 
-        WorkingList = np.array(CopyArray)
-        TotalTime = 0
+        WorkingList = np.array(CopyArray) # lista de processos que serão executados, mas talvez ainda não esteja prontos
+        TotalTime = 0 # conta o tempo decorrido
         ProcessCount = CopyArray.size
-        ExecutingProcess = None
-        ReadyList = np.array([])
+        ExecutingProcess = None #processo no estado executando
+        ReadyList = np.array([]) #lista de processos que chegaram e esperam sua vez
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
@@ -194,17 +194,17 @@ class ProcessScheduler:
         Args:
             ProcessArray (_type_): _description_
         """
-        WorkingArray = np.array([]) 
+        WorkingArray = np.array([]) # lista de processos que serão executados, mas talvez ainda não esteja prontos
 
         for process in ProcessArray: # copia pq python é so por referencia
             WorkingArray = np.append(WorkingArray, process.clone() )
 
         CopyArray = np.array(WorkingArray)
 
-        ReadyList = np.array([])
-        TotalTime = 0
-        ProcessCount = WorkingArray.size
-        ExecutingProcess = None
+        ReadyList = np.array([]) # lista de prontos
+        TotalTime = 0 # conta tempo decorrido
+        ProcessCount = WorkingArray.size # qtd de processos a serem executados
+        ExecutingProcess = None # processo no estado executando
 
         Overloading = False
         OverloadTime = self.Overload
@@ -296,17 +296,17 @@ class ProcessScheduler:
         Args:
             ProcessArray (_type_): _description_
         """
-        WorkingArray = np.array([]) 
+        WorkingArray = np.array([]) # lista de processos que serão executados, mas talvez ainda não esteja prontos
 
         for process in ProcessArray: # copia pq python é so por referencia
             WorkingArray = np.append(WorkingArray, process.clone() )
 
         CopyArray = np.array(WorkingArray)
 
-        ReadyList = np.array([])
-        TotalTime = 0
+        ReadyList = np.array([]) # lista de prontos
+        TotalTime = 0 # tempo decorrido
         ProcessCount = WorkingArray.size
-        ExecutingProcess = None
+        ExecutingProcess = None # processo no estado executando
 
         Overloading = False
         OverloadTime = self.Overload
