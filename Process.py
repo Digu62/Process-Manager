@@ -1,16 +1,16 @@
 class process:
     def __init__(self, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0, ProcessId = 0 ):
-        self.StartTime = StartTime
-        self.ExecutionTime = ExecutionTime
-        self.ExecutedTime = 0
+        self.StartTime = StartTime # tempo que o processo entrou na fila
+        self.ExecutionTime = ExecutionTime # tempo para execucao
+        self.ExecutedTime = 0 # tempo ja executado
         self.ExecutionTimePerQuantum = 0
-        self.WaitTime = 0
-        self.Deadline = Deadline
-        self.Priority = Priority
-        self.ProcessId = ProcessId
-        self.MemoryPages = MemoryPages
+        self.WaitTime = 0 # tempo na fila de espera
+        self.Deadline = Deadline # prazo para concluir o processo
+        self.Priority = Priority # nivel de prioridade do processo
+        self.ProcessId = ProcessId # identificador do processo
+        self.MemoryPages = MemoryPages # numero de paginas que ocupa na memoria
         # self.MemorySize = 4 # mudar para 4098 ?
-        self.MetDeadline = True
+        self.MetDeadline = True #verificador se a deadline foi cumprida
 
     def clone(self):
         proc = process()
