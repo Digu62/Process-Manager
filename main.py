@@ -8,6 +8,7 @@ window = Tk()
 window.title('Escalonador de Processos e Memória')
 window.geometry("400x400+500+150")
 window.resizable(height=False, width=False)
+window.configure(bg='#569BAA')
 
 lbl1 = Label(window, text='Número de processos', anchor='center')
 lbl1.place(x=70, y=120)

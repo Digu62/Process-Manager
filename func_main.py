@@ -5,6 +5,7 @@ def open_win(window,p,q,o):
 
     root= Tk()
     root.geometry('500x400')
+    root.configure(bg='#569BAA')
 
     # frame
     main_frame = Frame(root)
@@ -27,7 +28,6 @@ def open_win(window,p,q,o):
     frame2 = Frame(canvas)
     #new frame -> canvas
     canvas.create_window((0,0), window=frame2, anchor='n')
-
 
     counter=0
     j=0
@@ -57,32 +57,8 @@ def open_win(window,p,q,o):
 def memoryWindow():
     memory_window= Tk()
     memory_window.title('Escalonador de Processos e Memória')
-    memory_window.geometry("800x800+500+150")
-
-    # frame
-    main_frame = Frame(memory_window)
-    main_frame.pack(fill=BOTH, expand=1)
-
-    #canvas 
-    canvas = Canvas(main_frame)
-    canvas.pack(side=LEFT, fill=BOTH, expand=1)
-
-    #scroll
-    scroll = Scrollbar(main_frame, orient=VERTICAL, command=canvas.yview)
-    scroll.pack(side=RIGHT, fill=Y)
-
-    #canvas config
-    canvas.configure(yscrollcommand=scroll.set)
-    canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
-
-    #segundo frame
-    frame2 = Frame(canvas)
-    #new frame -> canvas
-    canvas.create_window((0,0), window=frame2, anchor='n')
-
-
-
-
+    memory_window.geometry("800x800+300+0")
+    memory_window.configure(bg='#569BAA')
 
     # code for creating table
     n_rows = 50 #Will receive this values
@@ -106,18 +82,16 @@ def memoryWindow():
 
 
     # Memoria principal
-
     for i in range(FirstHalf):
         for j in range(n_columns):
-            table = Entry(frame2, width=3, fg='black',
+            table = Entry(memory_window, width=3, fg='black',
                             font=('Arial',16,'bold'))
-
-            table.grid(row=i, column=j) 
+            table.grid(row=i, column=j,padx=-1, pady=0) 
             table.insert(END,lst[i][j])
-    
+
     for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
-            table = Entry(frame2, width=3, fg='black',
+            table = Entry(memory_window, width=3, fg='black',
                             font=('Arial',16,'bold'))
 
             table.grid(row=i-SecondHalf, column=j+2) 
@@ -128,7 +102,7 @@ def memoryWindow():
     k = 5
     for i in range(FirstHalf): #rows
         for j in range(n_columns): # columns
-            table = Entry(frame2, width=3, fg='black',
+            table = Entry(memory_window, width=3, fg='black',
                             font=('Arial',16,'bold'))
 
             if j == 0:
@@ -139,7 +113,7 @@ def memoryWindow():
     
     for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
-            table = Entry(frame2, width=3, fg='black',
+            table = Entry(memory_window, width=3, fg='black',
                             font=('Arial',16,'bold'))
 
             table.grid(row=i-SecondHalf, column=j+k+2) 
