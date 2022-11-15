@@ -506,13 +506,13 @@ if __name__ == "__main__":
     ProcessA = Process.process(0,4,7,0,1,1)
     ProcessB = Process.process(2,2,3,0,1,2)
     ProcessC = Process.process(4,1,5,0,1,3)
-    ProcessD = Process.process(6,3,10,0,1,4)
+    ProcessD = Process.process(6,3,3,0,1,4)
 
 
     # processos da prova
     Process1 = Process.process(0,4,35,0,17,1)
     Process2 = Process.process(3,2,15,0,17,2)
-    Process3 = Process.process(6,7,1,0,17,3)
+    Process3 = Process.process(6,7,20,0,17,3)
     Process4 = Process.process(9,8,25,0,17,4)
 
     # outros processos
@@ -530,11 +530,11 @@ if __name__ == "__main__":
 
     #scheduler.RoundRobin(ProcessArray, MemAlgo)
 
-    #scheduler.Edf(ProcessArray, MemAlgo)
+    scheduler.Edf(ProcessArray, MemAlgo)
 
     #scheduler.FIFO(ProcessArray1, MemAlgo)
     #scheduler.Sjf(ProcessArray1, MemAlgo)
 
     #scheduler.RoundRobin(ProcessArray1, MemAlgo)
 
-    scheduler.Edf(ProcessArray1, MemAlgo)
+    #scheduler.Edf(ProcessArray1, MemAlgo)
