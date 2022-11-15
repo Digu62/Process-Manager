@@ -482,6 +482,8 @@ class ProcessScheduler:
             if process.StartTime < TotalTime:
                 for j in range(TotalTime):
                     print(process.PrintList[j], end = "")
+                if not process.MetDeadline:
+                    print(" Estourou", end="")
 
             print()
         print()
@@ -510,7 +512,7 @@ if __name__ == "__main__":
     # processos da prova
     Process1 = Process.process(0,4,35,0,17,1)
     Process2 = Process.process(3,2,15,0,17,2)
-    Process3 = Process.process(6,7,20,0,17,3)
+    Process3 = Process.process(6,7,1,0,17,3)
     Process4 = Process.process(9,8,25,0,17,4)
 
     # outros processos
@@ -533,6 +535,6 @@ if __name__ == "__main__":
     #scheduler.FIFO(ProcessArray1, MemAlgo)
     #scheduler.Sjf(ProcessArray1, MemAlgo)
 
-    scheduler.RoundRobin(ProcessArray1, MemAlgo)
+    #scheduler.RoundRobin(ProcessArray1, MemAlgo)
 
-    #scheduler.Edf(ProcessArray1, MemAlgo)
+    scheduler.Edf(ProcessArray1, MemAlgo)
