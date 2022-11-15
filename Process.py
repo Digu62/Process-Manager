@@ -11,6 +11,7 @@ class process:
         self.MemoryPages = MemoryPages # numero de paginas que ocupa na memoria
         # self.MemorySize = 4 # mudar para 4098 ?
         self.MetDeadline = True #verificador se a deadline foi cumprida
+        self.PrintList = []
 
     def clone(self):
         proc = process()

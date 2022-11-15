@@ -17,6 +17,17 @@ class Memory:
         Mem.PageList = self.PageList
         return Mem
 
+    def ShowMemory(self):
+        print("Memoria Principal: Numero da pagina[Id do processo, Endereço da pagina na Virtual]" )
+        for i in range(50):
+            if self.PageList[i].Process == None:
+                print(f"{i}[ ]", end=" ")
+            else:
+                print(f"{i}[{str(self.PageList[i].Process.ProcessId)},{str(self.PageList[i].VirtualMemoryAddress)}]",end=" ")
+        print()
+        print()
+        return
+
     def FindOldest(self): # retorna o processo mais antigo
 
         Oldest = self.PageList[0]

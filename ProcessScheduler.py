@@ -3,6 +3,10 @@ import numpy as np
 import MemoryScheduler
 import Memory
 import VirtualMemory
+import time
+from os import system, name
+
+
 
 class ProcessScheduler:
     
@@ -46,6 +50,8 @@ class ProcessScheduler:
         ExecutingProcess = None #Process in execution   
         ReadyList = np.array([])
 
+        inp = 'p'
+        
 
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
@@ -59,7 +65,9 @@ class ProcessScheduler:
                 if process.StartTime <= TotalTime:
                     ReadyList = np.append(ReadyList, process)
                     WorkingList = np.delete(WorkingList, np.where(WorkingList == process))
-            
+                    for i in range(TotalTime):
+                        process.PrintList.append(" ")
+
             #Escolhe o proximo
             if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
                 for process in ReadyList:
@@ -73,10 +81,11 @@ class ProcessScheduler:
                         break
 
             TotalTime += 1
-            print("Tempo atual:" + str(TotalTime))
+            #print("Tempo atual:" + str(TotalTime))
 
             try:
                 ExecutingProcess.ExecutedTime += 1
+                ExecutingProcess.PrintList.append("X")
 
                 if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
                         ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
@@ -89,20 +98,28 @@ class ProcessScheduler:
             for process in ReadyList:
                 if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                     continue
+                process.PrintList.append("O")
                 process.WaitTime += 1
 
 
+            # for process in CopyArray:
+            #     process.print_process()        
+            # print("----------------------------")
             for process in CopyArray:
-                process.print_process()        
-            print("----------------------------")
+                for i in range(process.WaitTime + process.ExecutedTime + process.StartTime ,TotalTime):
+                    process.PrintList.append(" ")
+            self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
+            
+            if inp == 'p' or inp == 'P':
+                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
         
-        print("TotalTime : ")
-        print(TotalTime)
+        print("----------------------------------")
+
+        print(f"Tempo total : {str(TotalTime)}")
         print("----------------------------------")
         
 
-        print("Turnaround : ")
-        print(self.TurnAround(CopyArray))
+        print(f"Turnaround : {str(self.TurnAround(CopyArray))}")
         print("----------------------------------")
         return
 
@@ -125,6 +142,8 @@ class ProcessScheduler:
         ExecutingProcess = None #processo no estado executando
         ReadyList = np.array([]) #lista de processos que chegaram e esperam sua vez
 
+        inp = 'p'
+
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
         Mem = Memory.Memory()
@@ -137,6 +156,8 @@ class ProcessScheduler:
                 if process.StartTime <= TotalTime:
                     ReadyList = np.append(ReadyList, process)
                     WorkingList = np.delete(WorkingList, np.where(WorkingList == process))
+                    for i in range(TotalTime):
+                        process.PrintList.append(" ")
 
             #Escolhe o proximo
             if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
@@ -156,10 +177,11 @@ class ProcessScheduler:
                     MemScheduler.LRU(Mem, VMem, ExecutingProcess)
 
             TotalTime += 1
-            print("Tempo atual:" + str(TotalTime))
+            #print("Tempo atual:" + str(TotalTime))
 
             try:
                 ExecutingProcess.ExecutedTime += 1
+                ExecutingProcess.PrintList.append("X")
 
                 if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
                         ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
@@ -171,18 +193,29 @@ class ProcessScheduler:
             for process in ReadyList:
                 if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                     continue
+                process.PrintList.append("O")
                 process.WaitTime += 1
 
                 
+            # for process in CopyArray:
+            #     process.print_process()        
+            # print("----------------------------")
             for process in CopyArray:
-                process.print_process()        
-            print("----------------------------")
-        
-        print("TotalTime : ")
-        print(TotalTime)
+                for i in range(process.WaitTime + process.ExecutedTime + process.StartTime ,TotalTime):
+                    process.PrintList.append(" ")
+            
+            self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
+            
+            if inp == 'p' or inp == 'P':
+                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
+
+                
         print("----------------------------------")
-        print("Turnaround : ")
-        print(self.TurnAround(CopyArray))
+
+
+        print(f"Tempo total : {str(TotalTime)}")
+        print("----------------------------------")
+        print(f"Turnaround : {str(self.TurnAround(CopyArray))}")
         print("----------------------------------")
         return
 
@@ -209,6 +242,8 @@ class ProcessScheduler:
         Overloading = False
         OverloadTime = self.Overload
 
+        inp = 'p'
+
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
         Mem = Memory.Memory()
@@ -220,6 +255,8 @@ class ProcessScheduler:
                 if process.StartTime <= TotalTime:
                     ReadyList = np.append(ReadyList, process)
                     WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == process))
+                    for i in range(TotalTime):
+                        process.PrintList.append(" ")
             
 
             if ExecutingProcess == None: # escolhe o primeiro dos prontos se nenhum estiver sendo executado
@@ -233,13 +270,14 @@ class ProcessScheduler:
                     break
 
             TotalTime += 1
-            print("Tempo atual:" + str(TotalTime))
+            #print("Tempo atual:" + str(TotalTime))
 
             # Executando
             if not Overloading:
                 try:
                     ExecutingProcess.ExecutedTime += 1
                     ExecutingProcess.ExecutionTimePerQuantum += 1
+                    ExecutingProcess.PrintList.append("X")
 
                     if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
                             ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
@@ -257,10 +295,11 @@ class ProcessScheduler:
                 for process in ReadyList:
                     if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                         continue
+                    process.PrintList.append("O")
                     process.WaitTime += 1
 
             else:
-                print("Overloading")
+                #print("Overloading")
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
@@ -268,25 +307,35 @@ class ProcessScheduler:
                 for process in ReadyList:
                     if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
                         continue
+                    process.PrintList.append("#")
                     process.WaitTime += 1
                 OverloadTime -= 1
+                
                 if OverloadTime <= 0: # terminando overload
                     OverloadTime = self.Overload
                     ExecutingProcess = None
                     Overloading = False
               
+            # for process in CopyArray:
+            #     process.print_process()        
+            # print("----------------------------")
             for process in CopyArray:
-                process.print_process()        
-            print("----------------------------")
+                for i in range(process.WaitTime + process.ExecutedTime + process.StartTime ,TotalTime):
+                    process.PrintList.append(" ")
+            
+            self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
+            
+            if inp == 'p' or inp == 'P':
+                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
 
+                
+        print("----------------------------------")
         
-        print("TotalTime : ")
-        print(TotalTime)
+        print(f"Tempo total : {str(TotalTime)}")
         print("----------------------------------")
         
 
-        print("Turnaround : ")
-        print(self.TurnAround(CopyArray))
+        print(f"Turnaround : {str(self.TurnAround(CopyArray))}")
         print("----------------------------------")
         return
 
@@ -311,6 +360,8 @@ class ProcessScheduler:
         Overloading = False
         OverloadTime = self.Overload
 
+        inp = 'p'
+
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
         Mem = Memory.Memory()
@@ -323,7 +374,8 @@ class ProcessScheduler:
                 if process.StartTime <= TotalTime:
                     ReadyList = np.append(ReadyList, process)
                     WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == process))
-            
+                    for i in range(TotalTime):
+                        process.PrintList.append(" ")
 
             if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
                 for process in ReadyList:
@@ -342,14 +394,15 @@ class ProcessScheduler:
                     MemScheduler.LRU(Mem, VMem, ExecutingProcess)
 
             TotalTime += 1
-            print("Tempo atual:" + str(TotalTime))
+            #print("Tempo atual:" + str(TotalTime))
 
             # Executando
             if not Overloading:
                 try:
                     ExecutingProcess.ExecutedTime += 1
                     ExecutingProcess.ExecutionTimePerQuantum += 1
-
+                    ExecutingProcess.PrintList.append("X")
+                    
                     if ExecutingProcess.Deadline - (TotalTime - ExecutingProcess.StartTime) < 0:
                         ExecutingProcess.MetDeadline = False
 
@@ -369,9 +422,10 @@ class ProcessScheduler:
                 for process in ReadyList:
                     if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                         continue
+                    process.PrintList.append("O")
                     process.WaitTime += 1
             else:
-                print("Overloading")
+                #print("Overloading")
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
@@ -379,6 +433,7 @@ class ProcessScheduler:
                 for process in ReadyList:
                     if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
                         continue
+                    process.PrintList.append("#")
                     process.WaitTime += 1
                 OverloadTime -= 1
                 if OverloadTime <= 0: # terminando overload
@@ -387,22 +442,62 @@ class ProcessScheduler:
                     Overloading = False
                 
               
+            # for process in CopyArray:
+            #     process.print_process()        
+            # print("----------------------------")
             for process in CopyArray:
-                process.print_process()        
-            print("----------------------------")
+                for i in range(process.WaitTime + process.ExecutedTime + process.StartTime ,TotalTime):
+                    process.PrintList.append(" ")
+            
+            self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
+            
+            if inp == 'p' or inp == 'P':
+                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
 
-        
-        print("TotalTime : ")
-        print(TotalTime)
+                
+        print("----------------------------------")
+
+        print(f"Tempo total : {str(TotalTime)}")
         print("----------------------------------")
         
 
-        print("Turnaround : ")
-        print(self.TurnAround(CopyArray))
+        print(f"Turnaround : {str(self.TurnAround(CopyArray))}")
         print("----------------------------------")
         return
 
+    def PrintProcess(self,ProcessArray, TotalTime, Mem, VMem):
+        #for i in range(TotalTime):
+        # for windows
+        if name == 'nt':
+            _ = system('cls')
+    
+        # for mac and linux(here, os.name is 'posix')
+        else:
+            _ = system('clear')
 
+       
+        
+        for process in ProcessArray:
+            print(process.ProcessId, end = "")
+            if process.StartTime < TotalTime:
+                for j in range(TotalTime):
+                    print(process.PrintList[j], end = "")
+
+            print()
+        print()
+        Mem.ShowMemory()
+        VMem.ShowMemory()
+        print("Legenda:")
+        print("  X = Executando")
+        print("  O = Esperando")
+        print("  # = Overload")
+        print()
+        print()
+        time.sleep(1)
+            
+            
+
+        return
 if __name__ == "__main__":
 
     # outros processos
@@ -413,10 +508,10 @@ if __name__ == "__main__":
 
 
     # processos da prova
-    Process1 = Process.process(0,4,35,0,1,1)
-    Process2 = Process.process(3,2,15,0,1,2)
-    Process3 = Process.process(6,7,20,0,1,3)
-    Process4 = Process.process(9,8,25,0,1,4)
+    Process1 = Process.process(0,4,35,0,17,1)
+    Process2 = Process.process(3,2,15,0,17,2)
+    Process3 = Process.process(6,7,20,0,17,3)
+    Process4 = Process.process(9,8,25,0,17,4)
 
     # outros processos
     ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])

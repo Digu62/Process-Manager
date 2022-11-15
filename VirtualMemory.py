@@ -22,6 +22,15 @@ class VirtualMemory:
         Mem.PageList = self.PageList
         return Mem
 
+    def ShowMemory(self):
+        print("Memoria Virtual: Numero da pagina[Id do processo, Endereço da pagina na Ram]" )
+        for i in range(self.PageList.size):
+            print(f"{i}[{str(self.PageList[i].Process.ProcessId)},{str(self.PageList[i].RamAdress)}]",end=" ")
+        print()
+        print()
+        return
+
+
     def FindProcess(self, process): # encontra indice das paginas virtuais do processo
 
         IndexList = []

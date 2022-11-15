@@ -9,11 +9,11 @@ class MemoryScheduler:
         pass
 
     #Escalonamento
-    def FIFO(self,Mem, VMen, Process):
+    def FIFO(self,Mem, VMem, Process):
         
-        IndexProcessPages = VMen.FindProcess(Process)
+        IndexProcessPages = VMem.FindProcess(Process)
 
-        if VMen.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
+        if VMem.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
             return
         
         # por padrão o procceso que chegou primeiro é colocado no começo, já que é o fifo
@@ -29,7 +29,7 @@ class MemoryScheduler:
             if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
                 j = 0
                 for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
-                    VMen.PageList[page].RamAdress = i+j
+                    VMem.PageList[page].RamAdress = i+j
                     Mem.PageList[i+j].Process = Process
                     Mem.PageList[i+j].RecentlyUsed = 50
                     Mem.PageList[i+j].VirtualMemoryAddress = page
@@ -39,12 +39,12 @@ class MemoryScheduler:
 
         return
 
-    def LRU(self,Mem, VMen, Process):
-        IndexProcessPages = VMen.FindProcess(Process)
+    def LRU(self,Mem, VMem, Process):
+        IndexProcessPages = VMem.FindProcess(Process)
 
-        if VMen.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
+        if VMem.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
             for index in IndexProcessPages:
-                Adress = VMen.PageList[index].RamAdress
+                Adress = VMem.PageList[index].RamAdress
                 Mem.PageList[Adress].RecentlyUsed = 50
             Mem.Update() # atualiza a ultima vez que cada processo foi utilizado
             return
@@ -60,7 +60,7 @@ class MemoryScheduler:
             if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
                 j = 0
                 for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
-                    VMen.PageList[page].RamAdress = i+j
+                    VMem.PageList[page].RamAdress = i+j
                     Mem.PageList[i+j].Process = Process
                     Mem.PageList[i+j].RecentlyUsed = 50
                     Mem.PageList[i+j].VirtualMemoryAddress = page
