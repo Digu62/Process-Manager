@@ -1,12 +1,14 @@
 import math
+import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 
 def open_win(window,p,q,o):
-
+    
     root= Tk()
-    root.geometry('500x400')
+    root.geometry('600x500+420+110')
     root.configure(bg='#569BAA')
+    root.iconbitmap('./images/icon.ico')
 
     # frame
     main_frame = Frame(root)
@@ -36,7 +38,7 @@ def open_win(window,p,q,o):
     j=0
     for i in range(0,p):
 
-        lb1 = Label(frame2, text=f'Processo(Id): {i}').grid(row=j, column=0, sticky= N, pady=(0,7), padx=(0,20))
+        Label(frame2, text=f'Processo(Id): {i}').grid(row=j, column=0, sticky= N, pady=(0,7), padx=(0,20))
         Entry(frame2, text=f'Processo(Id): {i}').grid(row=j, column=1, sticky= N, pady=(0,7), padx=(0,20))
 
         Label(frame2, text=f'Inicio do processo:').grid(row=j+1, column=0, sticky= N, pady=(0,7), padx=(0,20))  
@@ -55,13 +57,15 @@ def open_win(window,p,q,o):
         Entry(frame2, text='Páginas na memória:').grid(row=j+5, column=1, sticky=N, pady=(0,60), padx=(0,20))
         j=j+6
 
-    Button(frame2,text ="Avançar",command = '')
+    btn1 = Button(canvas,text ="Avançar", command = processWindow)  
+    btn1.place(x=300, y=20)
 
 def memoryWindow():
     memory_window= Tk()
     memory_window.title('Escalonador de Processos e Memória')
-    memory_window.geometry("800x800+300+0")
+    memory_window.geometry("800x800+0+0")
     memory_window.configure(bg='#569BAA')
+    memory_window.iconbitmap('./images/icon.ico')
 
     # code for creating table
     n_rows = 50 #Will receive this values
@@ -89,15 +93,22 @@ def memoryWindow():
         for j in range(n_columns):
             table = Entry(memory_window, width=3, fg='black',
                             font=('Arial',16,'bold'))
-            table.grid(row=i, column=j) 
+            if i <= (n_rows-SecondHalf)/2:
+                table.grid(row=i, column=j) 
+            else:
+                table.grid(row=i, column=j) 
+            # , pady=(20),padx=(20), sticky=E
             table.insert(END,lst[i][j])
 
     for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
             table = Entry(memory_window, width=3, fg='black',
                             font=('Arial',16,'bold'))
-
-            table.grid(row=i-SecondHalf, column=j+2) 
+            if i <= (n_rows-SecondHalf)/2:
+                table.grid(row=i-SecondHalf, column=j+2) 
+            else:
+                table.grid(row=i-SecondHalf, column=j+2) 
+            # , pady=(0),padx=(0)
             table.insert(END,lst[i][j])
 
 
@@ -106,7 +117,7 @@ def memoryWindow():
     for i in range(FirstHalf): #rows
         for j in range(n_columns): # columns
             table = Entry(memory_window, width=3, fg='black',
-                            font=('Arial',16,'bold'))
+                            font=('Arial',10,'bold'))
 
             if j == 0:
                 table.grid(row=i, column=j+k, padx=(300,0) ) 
@@ -117,20 +128,21 @@ def memoryWindow():
     for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
             table = Entry(memory_window, width=3, fg='black',
-                            font=('Arial',16,'bold'))
+                            font=('Arial',10,'bold'))
 
             table.grid(row=i-SecondHalf, column=j+k+2) 
             table.insert(END,lst[i][j])
 
     
-        
+    # processWindow()
     memory_window.mainloop()
 
 def processWindow():
     process_window= Tk()
     process_window.title('Escalonador de Processos')
-    process_window.geometry("800x800+300+0")
+    process_window.geometry("800x800+600+0")
     process_window.configure(bg='#569BAA')
+    process_window.iconbitmap('./images/icon.ico')
 
 # Creating table
     n_rows = 10 #Will receive number of process
@@ -143,7 +155,7 @@ def processWindow():
             table = Entry(process_window, width=3, fg='black',
                             font=('Arial',16,'bold'))
             table.grid(row=i, column=j+10) 
-            table.configure({"background":'Green'})
+            # table.configure({"background":'Green'})
 
 #Table with process informations
     #------

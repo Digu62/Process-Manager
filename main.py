@@ -2,7 +2,7 @@ from tkinter import *
 from func_main import *
 
 # processWindow()
-# # memoryWindow()
+# memoryWindow()
 # exit()
 
 window = Tk()
@@ -10,6 +10,7 @@ window.title('Escalonador de Processos e Memória')
 window.geometry("400x400+500+150")
 window.resizable(height=False, width=False)
 window.configure(bg='#569BAA')
+window.iconbitmap('./images/icon.ico')
 
 lbl1 = Label(window, text='Número de processos', anchor='center')
 lbl1.place(x=70, y=120)
@@ -45,10 +46,11 @@ def call_open():
     p = int(ent1.get())
     q = int(ent2.get())
     o = int(ent3.get())
+    window.destroy()
     open_win(window,p,q,o)
+    
 
 btn1 = Button(window,text ="Avançar",command = call_open)
 btn1.place(x=170, y=230)
-
 
 window.mainloop()
