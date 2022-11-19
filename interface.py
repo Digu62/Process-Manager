@@ -96,7 +96,6 @@ def logs_window(window,num_process,quantum,overload):
     for i in range(0,num_process):
 
         Label(frame2, text=f'Processo(Id): {i}').grid(row=j, column=0, sticky= N, pady=(0,7), padx=(0,20))
-        Entry(frame2, text=f'Processo(Id): {i}').grid(row=j, column=1, sticky= N, pady=(0,7), padx=(0,20))
 
         Label(frame2, text=f'Inicio do processo:').grid(row=j+1, column=0, sticky= N, pady=(0,7), padx=(0,20))  
         Entry(frame2, text='Inicio do processo:').grid(row=j+1, column=1, sticky= N, pady=(0,7), padx=(0,20))
@@ -117,7 +116,7 @@ def logs_window(window,num_process,quantum,overload):
     btn1 = Button(canvas,text ="Avançar", command = processWindow)  
     btn1.place(x=300, y=20)
 
-def temporary_window(window,num_process,quantum,overload):
+def temporary_window(num_process,quantum,overload):
     print(f'Process: {num_process}')
     print(f'Quantum: {quantum}')
     print(f'Overload: {overload}')
@@ -137,8 +136,6 @@ def temporary_window(window,num_process,quantum,overload):
     lb_id = Label(root, text=f'Processo(Id): {i}')
     lb_id.place(x=x_position, y=y_position)
     lb_id.configure(bg='#569BAA')
-    id_entry = Entry(root, text=f'Processo(Id): {i}')
-    id_entry.place(x=x_position + 120, y=y_position)
 
     lb_init = Label(root, text=f'Inicio do processo:')
     lb_init.place(x=x_position, y=y_position + 30)
@@ -171,7 +168,7 @@ def temporary_window(window,num_process,quantum,overload):
     pag_entry.place(x=x_position + 120, y= y_position + 150)
 
     def print_values():
-        process_data[str(i)] = [id_entry.get(), init_entry.get(), exec_entry.get(), dead_entry.get(), pri_entry.get(),  pag_entry.get()]
+        process_data[str(i)] = [init_entry.get(), exec_entry.get(), dead_entry.get(), pri_entry.get(),  pag_entry.get()]
         # print(int(id_entry.get()))
         # print(int(init_entry.get()))
         # print(int(exec_entry.get()))
@@ -262,6 +259,7 @@ def memoryWindow():
     # processWindow()
     memory_window.mainloop()
 
+'''
 def processWindow():
     process_window= Tk()
     process_window.title('Escalonador de Processos')
@@ -320,3 +318,17 @@ def processWindow():
     #------
 
     process_window.mainloop()
+'''
+
+def processos_res(lista):
+    window= Tk()
+    window.title('Escalonador de Processos e Memória')
+    window.geometry("800x800+0+0")
+    window.configure(bg='#569BAA')
+    window.iconbitmap('./images/icon.ico')
+
+
+
+    window.mainloop()
+
+temporary_window()
