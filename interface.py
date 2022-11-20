@@ -2,6 +2,8 @@ import math
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
+
 
 def main_window():
     #Criação da janela principal
@@ -48,7 +50,7 @@ def main_window():
         quantum = int(ent2.get())
         overload = int(ent3.get())
         window.destroy()
-        temporary_window(window,num_process,quantum,overload)
+        temporary_window(num_process,quantum,overload)
         # logs_window(window,num_process,quantum,overload)
         
     btn1 = Button(window,
@@ -127,11 +129,10 @@ def temporary_window(num_process,quantum,overload):
     root.configure(bg='#569BAA')
     root.iconbitmap('./images/icon.ico')
 
-    process_data = {}
     i = 0
-    # def process_log():
+    y_position = 70
     x_position = 150
-    y_position = 120
+    process_data = {}
 
     lb_id = Label(root, text=f'Processo(Id): {i}')
     lb_id.place(x=x_position, y=y_position)
@@ -149,7 +150,7 @@ def temporary_window(num_process,quantum,overload):
     exec_entry = Entry(root, text='Tempo de execução:')
     exec_entry.place(x=x_position + 120, y=y_position + 60)
 
-    lb_dead   = Label(root, text=f'Deadline:')
+    lb_dead   = Label(root, text=f'Deadline:')  
     lb_dead.place(x=x_position, y=y_position + 90)
     lb_dead.configure(bg='#569BAA')
     dead_entry = Entry(root, text='Deadline:')
@@ -166,21 +167,85 @@ def temporary_window(num_process,quantum,overload):
     lb_pag.configure(bg='#569BAA')
     pag_entry = Entry(root, text='Páginas na memória:')
     pag_entry.place(x=x_position + 120, y= y_position + 150)
-
-    def print_values():
-        process_data[str(i)] = [init_entry.get(), exec_entry.get(), dead_entry.get(), pri_entry.get(),  pag_entry.get()]
-        # print(int(id_entry.get()))
-        # print(int(init_entry.get()))
-        # print(int(exec_entry.get()))
-        # print(int(dead_entry.get()))
-        # print(int(pri_entry.get()))
-        # print(int(pag_entry.get()))
-        print(process_data)
         
-    # btn1 = Button(root,text ="Avançar", command = processWindow)  
-    btn1 = Button(root,text ="Avançar", command = print_values)  
+    def all_filled():
+        filled = False
+        values = [  init_entry.get(), 
+                    exec_entry.get(), 
+                    dead_entry.get(), 
+                    pri_entry.get(),  
+                    pag_entry.get()]
+        if "" not in values:
+            print("Filled")
+            filled = True
 
-    btn1.place(x=x_position + 100, y=y_position + 200)
+        return filled
+    
+    def clean_all():
+        init_entry.delete(0, END)
+        exec_entry.delete(0, END)
+        dead_entry.delete(0, END)
+        pri_entry.delete(0, END)
+        pag_entry.delete(0, END)
+
+    def next_process():
+        nonlocal i
+        if all_filled(): #Não altera os dados se algum dos campos estiver zerado
+            if i < num_process: #Não excede o limite de processos
+                process_data[str(i)] = [init_entry.get(), 
+                                        exec_entry.get(), 
+                                        dead_entry.get(), 
+                                        pri_entry.get(),  
+                                        pag_entry.get()] #Saves de data in dictionary
+                
+                i += 1
+                if i < num_process: #Caso seja o ultimo valor não zera nem troca o id
+                    lb_id.configure(text=f'Processo(Id): {i}')
+                    clean_all()
+                print(process_data)
+        else:
+            messagebox.showinfo(message="Preencha todos os campos")
+
+    def prev_process():
+        nonlocal i
+        if i > 0:   #Não retorna menos que o minimo de processos
+            i -= 1
+            del process_data[str(i)] #Deleta o processo atual antes de voltar
+            clean_all()
+            lb_id.configure(text=f'Processo(Id): {i}')
+            print(process_data)
+
+    # btn1 = Button(root,text ="Avançar", command = processWindow)  
+    prev = Button(root,text ="<", command = prev_process)  
+    prev.place(x=x_position + 100, y=y_position + 200)
+
+    next = Button(root,text =">", command = next_process)  
+    next.place(x=x_position + 120, y=y_position + 200)
+
+    #Processos
+    fifo = Button(root,text ="FIFO")
+    fifo.place(x=x_position + 40, y=y_position + 250)
+
+    sjf = Button(root,text ="SJF")
+    sjf.place(x=x_position + 90, y=y_position + 250)
+
+    round_robin = Button(root,text ="Round Robin")
+    round_robin.place(x=x_position + 130, y=y_position + 250)
+
+    edf = Button(root,text ="EDF")
+    edf.place(x=x_position + 220, y=y_position + 250)
+
+
+    #Memoria
+    fifo = Button(root,text ="FIFO")
+    fifo.place(x=x_position + 40, y=y_position + 300)
+
+    mru = Button(root,text ="MRU")
+    mru.place(x=x_position + 90, y=y_position + 300)
+
+    proceed = Button(root,text ="Avançar", command = processWindow)
+    proceed.place(x=x_position + 100, y=y_position + 350)
+
 
 def memoryWindow():
     memory_window= Tk()
@@ -259,7 +324,6 @@ def memoryWindow():
     # processWindow()
     memory_window.mainloop()
 
-'''
 def processWindow():
     process_window= Tk()
     process_window.title('Escalonador de Processos')
@@ -318,7 +382,6 @@ def processWindow():
     #------
 
     process_window.mainloop()
-'''
 
 def processos_res(lista):
     window= Tk()
@@ -330,5 +393,3 @@ def processos_res(lista):
 
 
     window.mainloop()
-
-temporary_window()
