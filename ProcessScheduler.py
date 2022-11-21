@@ -219,7 +219,6 @@ class ProcessScheduler:
         print("----------------------------------")
         return
 
-
     def RoundRobin(self, ProcessArray, MemAlgo):
         """This function implement the round robin algorithm
         It's a preemptive algorithm in which time slices (quanta) are assigned to each process in equal portions and circular order.

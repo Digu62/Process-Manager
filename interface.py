@@ -215,36 +215,41 @@ def temporary_window(num_process,quantum,overload):
             lb_id.configure(text=f'Processo(Id): {i}')
             print(process_data)
 
-    # btn1 = Button(root,text ="Avançar", command = processWindow)  
-    prev = Button(root,text ="<", command = prev_process)  
-    prev.place(x=x_position + 100, y=y_position + 200)
+    # btn1 = Button(root,text ="Avançar", command = processWindow)
+    prev = Button(root,text ="<", command = prev_process)
+    prev.place(x=x_position + 205, y=y_position + 175)
 
-    next = Button(root,text =">", command = next_process)  
-    next.place(x=x_position + 120, y=y_position + 200)
+    next = Button(root,text =">", command = next_process)
+    next.place(x=x_position + 225, y=y_position + 175)
 
     #Processos
-    fifo = Button(root,text ="FIFO")
-    fifo.place(x=x_position + 40, y=y_position + 250)
+    lb_process = Label(root, text='Escalonador de processos')
+    lb_process.place(x=x_position, y=y_position + 230)
+    lb_process.configure(bg='#569BAA')
 
-    sjf = Button(root,text ="SJF")
-    sjf.place(x=x_position + 90, y=y_position + 250)
-
-    round_robin = Button(root,text ="Round Robin")
-    round_robin.place(x=x_position + 130, y=y_position + 250)
-
-    edf = Button(root,text ="EDF")
-    edf.place(x=x_position + 220, y=y_position + 250)
-
+    process = StringVar()
+    process.set( "FIFO" )
+    proc_menu = OptionMenu(root, process, "FIFO", "SJF", "Round Robin", "EDF")
+    proc_menu.place(x=x_position + 150, y=y_position + 230)
 
     #Memoria
-    fifo = Button(root,text ="FIFO")
-    fifo.place(x=x_position + 40, y=y_position + 300)
+    lb_mem = Label(root, text='Escalonador de memoria')
+    lb_mem.place(x=x_position, y=y_position + 280)
+    lb_mem.configure(bg='#569BAA')
 
-    mru = Button(root,text ="MRU")
-    mru.place(x=x_position + 90, y=y_position + 300)
+    memory = StringVar()
+    memory.set( "FIFO" )
+    mem_menu = OptionMenu(root, memory, "FIFO", "MRU")
+    mem_menu.place(x=x_position + 150, y=y_position + 280)
 
-    proceed = Button(root,text ="Avançar", command = processWindow)
-    proceed.place(x=x_position + 100, y=y_position + 350)
+    def passing_data():
+        # process.get()
+        # memory.get()
+        # num_process,quantum,overload
+        # process_data = process_data
+        processWindow()
+    proceed = Button(root,text ="Avançar", command = passing_data)
+    proceed.place(x=x_position + 100, y=y_position + 330)
 
 
 def memoryWindow():
