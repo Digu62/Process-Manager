@@ -1,4 +1,6 @@
 import math
+import pandas as pd
+
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -253,7 +255,6 @@ def new_log_window(num_process,quantum,overload):
     proceed = Button(root,text ="Avançar", command = passing_data)
     proceed.place(x=x_position + 100, y=y_position + 330)
 
-
 def memoryWindow():
     memory_window= Tk()
     memory_window.title('Escalonador de Processos e Memória')
@@ -332,13 +333,9 @@ def memoryWindow():
     memory_window.mainloop()
 
 def processWindow(num_process, quantum, overload, process_data, algorithm):
-    print(f'num_process:{num_process}')
-    print(f'quantum:{quantum}')
-    print(f'overload:{overload}')
-    print(f'process_data:{process_data}')
-    process_window= Tk()
+    process_window = Tk()
     process_window.title('Escalonador de Processos')
-    process_window.geometry("800x800+600+0")
+    process_window.geometry("800x800+555+0")
     process_window.configure(bg='#569BAA')
     process_window.iconbitmap('./images/icon.ico')
 
@@ -347,13 +344,23 @@ def processWindow(num_process, quantum, overload, process_data, algorithm):
     n_columns = 50 #Will receive time spend to compute all process
     counter = 0
 
+    table = pd.DataFrame(index=np.arange(n_rows), columns=np.arange(n_columns)) #Vai armazenar a tabela de grids
+
 # Table o progress
     for i in range(n_rows):
         for j in range(n_columns):
-            table = Entry(process_window, width=3, fg='black',
-                            font=('Arial',16,'bold'))
-            table.grid(row=i, column=j+10) 
+            table.loc[i,j] = Entry(process_window, width=3, fg='black',
+                        font=('Arial',16,'bold'))
+            table.loc[i,j].grid(row=i, column=j+10) 
             # table.configure({"background":'Green'})
+    print(table)
+
+    #Looping de exemplo para passagem do tempo nos processos
+    from time import sleep
+    for k in range(30):
+        table.loc[0,k].configure({"background":'Green'})
+        process_window.update()
+        sleep(1)
 
 #Table with process informations
     #------
@@ -362,32 +369,32 @@ def processWindow(num_process, quantum, overload, process_data, algorithm):
     #------
 
 # Creating progress bar
-    def val_bar(max):
-        count = 0
-        steps = max/100
-        print(steps)
-        while count < steps:
-            count+=1
-            i=0
-            while i < 1000000: #Velocity from progress update
-                i+=1
+    # def val_bar(max):
+    #     count = 0
+    #     steps = max/100
+    #     print(steps)
+    #     while count < steps:
+    #         count+=1
+    #         i=0
+    #         while i < 1000000: #Velocity from progress update
+    #             i+=1
             
-            if count == 50:
-                progress_bar.config(style='red.Horizontal.TProgressbar')
-            elif count == 80:
-                progress_bar.config(style='green.Horizontal.TProgressbar')
-            var_progress.set(count)
-            process_window.update()
+    #         if count == 50:
+    #             progress_bar.config(style='red.Horizontal.TProgressbar')
+    #         elif count == 80:
+    #             progress_bar.config(style='green.Horizontal.TProgressbar')
+    #         var_progress.set(count)
+    #         process_window.update()
 
 
-    var_progress = DoubleVar()
-    st = ttk.Style()
-    st.theme_use('alt')
-    st.configure('red.Horizontal.TProgressbar', background='red')
-    st.configure('green.Horizontal.TProgressbar', background='green')
-    progress_bar = ttk.Progressbar(process_window, variable=var_progress, maximum=100, style='green.Horizontal.TProgressbar')
-    progress_bar.place(x=0,y=29,width=620,height=27) #grid(1) == width(40)
-    val_bar(100000)
+    # var_progress = DoubleVar()
+    # st = ttk.Style()
+    # st.theme_use('alt')
+    # st.configure('red.Horizontal.TProgressbar', background='red')
+    # st.configure('green.Horizontal.TProgressbar', background='green')
+    # progress_bar = ttk.Progressbar(process_window, variable=var_progress, maximum=100, style='green.Horizontal.TProgressbar')
+    # progress_bar.place(x=0,y=29,width=620,height=27) #grid(1) == width(40)
+    # val_bar(100000)
 
 #Creating labels information
     #------
