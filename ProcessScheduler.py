@@ -6,8 +6,6 @@ import VirtualMemory
 import MemoryScheduler
 from os import system, name
 
-
-
 class ProcessScheduler:
     
     ExecutingProcess = None
@@ -122,7 +120,6 @@ class ProcessScheduler:
         print(f"Turnaround : {str(self.TurnAround(CopyArray))}")
         print("----------------------------------")
         return
-
 
     def Sjf(self, ProcessArray, MemAlgo):
         """This function implement the shortest job first algorithm
@@ -499,6 +496,7 @@ class ProcessScheduler:
             
 
         return
+
 if __name__ == "__main__":
 
     # outros processos

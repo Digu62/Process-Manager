@@ -6,6 +6,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
+import Process
 from ProcessScheduler import *
 
 
@@ -333,37 +334,63 @@ def memoryWindow():
     memory_window.mainloop()
 
 def processWindow(num_process, quantum, overload, process_data, algorithm):
+# def processWindow(): #Utilizado para testes 
+    #Variaveis para teste
+    # num_process = 10
+    # -------
+
     process_window = Tk()
     process_window.title('Escalonador de Processos')
     process_window.geometry("800x800+555+0")
     process_window.configure(bg='#569BAA')
     process_window.iconbitmap('./images/icon.ico')
 
-# Creating table
-    n_rows = 10 #Will receive number of process
-    n_columns = 50 #Will receive time spend to compute all process
-    counter = 0
+    #Table with process informations
+    inf_x_space = 30
+    inf_y_space = 100
+    info_n_rows = num_process #Will receive number of process
+    info_n_columns = 5 #Will receive time spend to compute all process
+    info_table = pd.DataFrame(index=np.arange(info_n_rows), columns=np.arange(info_n_columns)) #Vai armazenar a tabela de grids
 
-    table = pd.DataFrame(index=np.arange(n_rows), columns=np.arange(n_columns)) #Vai armazenar a tabela de grids
+    for i in range(info_n_rows):
+        for j in range(info_n_columns):
+            info_table.loc[i,j] = Entry(process_window, width=2, fg='black',
+                        font=('Arial',16))
+            if j == 0:
+                info_table.loc[i,j].grid(row=i, column=j, padx=(inf_x_space,0))
+            else:
+                info_table.loc[i,j].grid(row=i, column=j)
+
+            if i ==0:
+                info_table.loc[i,j].grid(row=i, column=j, pady=(inf_y_space,0))
+            # info_table.configure({"background":'Green'})
 
 # Table o progress
+    progress_x_space = 200
+    progress_y_space = inf_y_space
+    n_rows = num_process #Will receive number of process
+    n_columns = 50 #Will receive time spend to compute all process
+    progress_table = pd.DataFrame(index=np.arange(n_rows), columns=np.arange(n_columns)) #Vai armazenar a tabela de grids
     for i in range(n_rows):
         for j in range(n_columns):
-            table.loc[i,j] = Entry(process_window, width=3, fg='black',
+            progress_table.loc[i,j] = Entry(process_window, width=1, fg='black',
                         font=('Arial',16,'bold'))
-            table.loc[i,j].grid(row=i, column=j+10) 
-            # table.configure({"background":'Green'})
-    print(table)
+            if j == 0:
+                progress_table.loc[i,j].grid(row=i, column=j, padx=(progress_x_space,0))
+            else:
+                progress_table.loc[i,j].grid(row=i, column=j)
+
+            if i ==0:
+                progress_table.loc[i,j].grid(row=i, column=j, pady=(progress_y_space,0))
+            # progress_table.configure({"background":'Green'})
+    # print(progress_table)
 
     #Looping de exemplo para passagem do tempo nos processos
-    from time import sleep
-    for k in range(30):
-        table.loc[0,k].configure({"background":'Green'})
-        process_window.update()
-        sleep(1)
-
-#Table with process informations
-    #------
+    # from time import sleep
+    # for k in range(30):
+    #     progress_table.loc[0,k].configure({"background":'Green'})
+    #     process_window.update()
+    #     sleep(1)
 
 # Creating ruller
     #------
