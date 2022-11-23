@@ -1,9 +1,9 @@
+import time
+import Memory
 import Process
 import numpy as np
-import MemoryScheduler
-import Memory
 import VirtualMemory
-import time
+import MemoryScheduler
 from os import system, name
 
 

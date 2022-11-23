@@ -4,6 +4,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
+from ProcessScheduler import *
+
 
 def main_window():
     #Criação da janela principal
@@ -50,7 +52,7 @@ def main_window():
         quantum = int(ent2.get())
         overload = int(ent3.get())
         window.destroy()
-        temporary_window(num_process,quantum,overload)
+        new_log_window(num_process,quantum,overload)
         # logs_window(window,num_process,quantum,overload)
         
     btn1 = Button(window,
@@ -118,7 +120,7 @@ def logs_window(window,num_process,quantum,overload):
     btn1 = Button(canvas,text ="Avançar", command = processWindow)  
     btn1.place(x=300, y=20)
 
-def temporary_window(num_process,quantum,overload):
+def new_log_window(num_process,quantum,overload):
     print(f'Process: {num_process}')
     print(f'Quantum: {quantum}')
     print(f'Overload: {overload}')
@@ -246,8 +248,8 @@ def temporary_window(num_process,quantum,overload):
         # process.get()
         # memory.get()
         # num_process,quantum,overload
-        # process_data = process_data
-        processWindow()
+        algorithm = memory.get()
+        processWindow(num_process, quantum, overload, process_data, algorithm)
     proceed = Button(root,text ="Avançar", command = passing_data)
     proceed.place(x=x_position + 100, y=y_position + 330)
 
@@ -329,7 +331,11 @@ def memoryWindow():
     # processWindow()
     memory_window.mainloop()
 
-def processWindow():
+def processWindow(num_process, quantum, overload, process_data, algorithm):
+    print(f'num_process:{num_process}')
+    print(f'quantum:{quantum}')
+    print(f'overload:{overload}')
+    print(f'process_data:{process_data}')
     process_window= Tk()
     process_window.title('Escalonador de Processos')
     process_window.geometry("800x800+600+0")
