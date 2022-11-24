@@ -1,5 +1,6 @@
 import math
 import pandas as pd
+from time import sleep
 
 import tkinter as tk
 from tkinter import *
@@ -333,10 +334,11 @@ def memoryWindow():
     # processWindow()
     memory_window.mainloop()
 
-def processWindow(num_process, quantum, overload, process_data, algorithm):
-# def processWindow(): #Utilizado para testes 
-    #Variaveis para teste
-    # num_process = 10
+# def processWindow(num_process, quantum, overload, process_data, algorithm):
+def processWindow(): #Utilizado para testes 
+    # Variaveis para teste
+    num_process = 4 
+    process_data = {'0':[1,2,3,4,5], '1':[4,5,6,7,8], '2':[1,2,3,4,5],'3':[1,2,3,4,5],'4':[1,2,3,4,5]}
     # -------
 
     process_window = Tk()
@@ -348,45 +350,65 @@ def processWindow(num_process, quantum, overload, process_data, algorithm):
     #Table with process informations
     inf_x_space = 30
     inf_y_space = 100
+    box_width = 2
     info_n_rows = num_process #Will receive number of process
-    info_n_columns = 5 #Will receive time spend to compute all process
+    info_n_columns = 6 #Will receive time spend to compute all process
     info_table = pd.DataFrame(index=np.arange(info_n_rows), columns=np.arange(info_n_columns)) #Vai armazenar a tabela de grids
 
     for i in range(info_n_rows):
         for j in range(info_n_columns):
-            info_table.loc[i,j] = Entry(process_window, width=2, fg='black',
+            info_table.loc[i,j] = Entry(process_window, width=box_width, fg='black',
                         font=('Arial',16))
             if j == 0:
                 info_table.loc[i,j].grid(row=i, column=j, padx=(inf_x_space,0))
+                info_table.loc[i,j].insert(END, str(i))
             else:
                 info_table.loc[i,j].grid(row=i, column=j)
+                info_table.loc[i,j].insert(END,process_data[str(i)][j-1])
 
             if i ==0:
                 info_table.loc[i,j].grid(row=i, column=j, pady=(inf_y_space,0))
+            
+            process_window.update()
             # info_table.configure({"background":'Green'})
 
-# Table o progress
-    progress_x_space = 200
-    progress_y_space = inf_y_space
-    n_rows = num_process #Will receive number of process
-    n_columns = 50 #Will receive time spend to compute all process
-    progress_table = pd.DataFrame(index=np.arange(n_rows), columns=np.arange(n_columns)) #Vai armazenar a tabela de grids
-    for i in range(n_rows):
-        for j in range(n_columns):
-            progress_table.loc[i,j] = Entry(process_window, width=1, fg='black',
-                        font=('Arial',16,'bold'))
-            if j == 0:
-                progress_table.loc[i,j].grid(row=i, column=j, padx=(progress_x_space,0))
-            else:
-                progress_table.loc[i,j].grid(row=i, column=j)
+    #Insere os labels de forma dinamica na tabela de informações
+    labels = ['Id', 'St', 'Ex', 'Dl', 'Pr', "Mp"]
+    x = 0
+    for k in range(info_n_columns): #Instancia os labels
+        process_window.update()
+        sleep(1)
+        lb = Label(process_window, text=str(labels[k]))
+        x = x + box_width*15
+        print(x)
+        y = inf_y_space + box_width * info_n_rows + 60
+        lb.place(x=x, y=y)#inf_y_space + box_width * info_n_rows + 10
+        lb.configure(bg='#569BAA')
 
-            if i ==0:
-                progress_table.loc[i,j].grid(row=i, column=j, pady=(progress_y_space,0))
+
+# Table o progress (Problemas quando protada junto com a de infromações)
+    # progress_x_space = 200
+    # progress_y_space = inf_y_space
+    # progress_n_rows = num_process #Will receive number of process
+    # progress_n_columns = 50 #Will receive time spend to compute all process
+    # progress_table = pd.DataFrame(index=np.arange(progress_n_rows), columns=np.arange(progress_n_columns)) #Vai armazenar a tabela de grids
+    
+    # for i in range(progress_n_rows):
+    #     for j in range(progress_n_columns):
+    #         progress_table.loc[i,j] = Entry(process_window, width=1, fg='black',
+    #                     font=('Arial',16,'bold'))
+    #         if j == 0:
+    #             progress_table.loc[i,j].grid(row=i, column=j, padx=(progress_x_space,0))
+    #         else:
+    #             progress_table.loc[i,j].grid(row=i, column=j)
+
+    #         if i ==0:
+    #             progress_table.loc[i,j].grid(row=i, column=j, pady=(progress_y_space,0))
             # progress_table.configure({"background":'Green'})
     # print(progress_table)
 
     #Looping de exemplo para passagem do tempo nos processos
-    # from time import sleep
+    # from time import sleep 
     # for k in range(30):
     #     progress_table.loc[0,k].configure({"background":'Green'})
     #     process_window.update()
