@@ -5,14 +5,29 @@ import numpy as np
 import VirtualMemory
 import MemoryScheduler
 from os import system, name
+from time import sleep
+
+import tkinter as tk
+from tkinter import *
+from tkinter import ttk
 
 class ProcessScheduler:
     
     ExecutingProcess = None
 
-    def __init__(self, Quantum, Overload):
+    def __init__(self, Quantum, Overload,interface_package):
         self.Quantum = Quantum
         self.Overload = Overload
+        self.process_window = interface_package[0]
+        self.info_table = interface_package[1]
+        self.progress_table = interface_package[2]
+        self.step_buttom = interface_package[3]
+        self.stop_buttom = interface_package[4]
+        self.proceed_buttom = interface_package[5]
+
+
+#Nota [Apagar apos finalizar o codigo]
+#progress_table.loc[numero do processo, tempo da execução]
 
     def TurnAround(self, ProcessList):
         """The Turnaround is the time that the process wait to ending, counting
@@ -37,10 +52,11 @@ class ProcessScheduler:
         Args:
             ProcessArray (Array): An array containing all the process in the instantiated.
         """
-        CopyArray = np.array([]) 
 
+        CopyArray = np.array([]) 
         for process in ProcessArray: # copia pq python é so por referencia
             CopyArray = np.append(CopyArray, process.clone() )
+
 
         WorkingList = np.array(CopyArray) # lista de processos que serão executados, mas talvez ainda não esteja prontos
         TotalTime = 0 # conta o tempo decorrido
@@ -48,13 +64,11 @@ class ProcessScheduler:
         ExecutingProcess = None #Process in execution   
         ReadyList = np.array([])
 
-        inp = 'p'
-        
+        inp = 'p' #Inicia executando passao a passo
 
-        MemScheduler = MemoryScheduler.MemoryScheduler()
-
-        Mem = Memory.Memory()
-        VMem = VirtualMemory.VirtualMemory(CopyArray)
+        MemScheduler = MemoryScheduler.MemoryScheduler() #Instancia um escalonador de memoria
+        Mem = Memory.Memory()  #Instancia uma memoria real
+        VMem = VirtualMemory.VirtualMemory(CopyArray) #Instancia uma memoria virtual
 
         #execuçao dos processos
         while ProcessCount != 0:
@@ -79,7 +93,15 @@ class ProcessScheduler:
                         break
 
             TotalTime += 1
-            #print("Tempo atual:" + str(TotalTime))
+
+            #Ao executar um processo atualiza a janela
+            if ExecutingProcess != None:
+                # print(f'TotalTime: {TotalTime}') #Codigo de debug
+                # print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
+                self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime].configure({"background":'Green'}) #Ao ler o processo marca ele como verde
+                self.process_window.update()
+            # sleep(0.5) #Codigo de debug
+            #print("Tempo atual:" + str(TotalTime)) #Codigo de debug
 
             try:
                 ExecutingProcess.ExecutedTime += 1
@@ -108,8 +130,8 @@ class ProcessScheduler:
                     process.PrintList.append(" ")
             self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
             
-            if inp == 'p' or inp == 'P':
-                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
+            if inp == 'p':
+                inp = input("1. Proxima iteracao: p\n2. De maneira automatica: a\n").lower()
         
         print("----------------------------------")
 
@@ -119,6 +141,7 @@ class ProcessScheduler:
 
         print(f"Turnaround : {str(self.TurnAround(CopyArray))}")
         print("----------------------------------")
+        sleep(5)
         return
 
     def Sjf(self, ProcessArray, MemAlgo):
@@ -175,7 +198,14 @@ class ProcessScheduler:
 
             TotalTime += 1
             #print("Tempo atual:" + str(TotalTime))
-
+            #Ao executar um processo atualiza a janela
+            if ExecutingProcess != None:
+                print(f'TotalTime: {TotalTime}') #Codigo de debug
+                print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
+                self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime].configure({"background":'Green'}) #Ao ler o processo marca ele como verde
+                self.process_window.update()
+            sleep(1) #Codigo de debug
+            
             try:
                 ExecutingProcess.ExecutedTime += 1
                 ExecutingProcess.PrintList.append("X")
@@ -203,8 +233,8 @@ class ProcessScheduler:
             
             self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
             
-            if inp == 'p' or inp == 'P':
-                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
+            if inp == 'p':
+                inp = input("1. Proxima iteracao: p\n2. De maneira automatica: a\n").lower()
 
                 
         print("----------------------------------")
@@ -270,6 +300,13 @@ class ProcessScheduler:
 
             # Executando
             if not Overloading:
+                if ExecutingProcess != None:
+                    print(f'TotalTime: {TotalTime}') #Codigo de debug
+                    print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
+                    self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime].configure({"background":'Green'}) #Ao ler o processo marca ele como verde
+                    self.process_window.update()
+                sleep(1) #Codigo de debug
+
                 try:
                     ExecutingProcess.ExecutedTime += 1
                     ExecutingProcess.ExecutionTimePerQuantum += 1
@@ -296,6 +333,10 @@ class ProcessScheduler:
 
             else:
                 #print("Overloading")
+                self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime].configure({"background":'Red'}) #Ao ler o processo marca ele como vermelho
+                self.process_window.update()
+                sleep(1) #Codigo de debug
+
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
@@ -321,8 +362,8 @@ class ProcessScheduler:
             
             self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
             
-            if inp == 'p' or inp == 'P':
-                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
+            if inp == 'p':
+                inp = input("1. Proxima iteracao: p\n2. De maneira automatica: a\n").lower()
 
                 
         print("----------------------------------")
@@ -400,7 +441,18 @@ class ProcessScheduler:
                     ExecutingProcess.PrintList.append("X")
                     
                     if ExecutingProcess.Deadline - (TotalTime - ExecutingProcess.StartTime) < 0:
+                        print(f'TotalTime: {TotalTime}') #Codigo de debug
+                        print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
+                        self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Gray'}) #Ao ler o processo marca ele como cinza
+                        self.process_window.update()
+                        sleep(1) #Codigo de debug
                         ExecutingProcess.MetDeadline = False
+                    else:
+                        print(f'TotalTime: {TotalTime}') #Codigo de debug
+                        print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
+                        self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Green'}) #Ao ler o processo marca ele como verde
+                        self.process_window.update()
+                        sleep(1) #Codigo de debug
 
                     if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
                             ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
@@ -422,6 +474,12 @@ class ProcessScheduler:
                     process.WaitTime += 1
             else:
                 #print("Overloading")
+                if ExecutingProcess != None:
+                    print(f'TotalTime: {TotalTime}') #Codigo de debug
+                    print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
+                    self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Red'}) #Ao ler o processo marca ele como vermelho
+                    self.process_window.update()
+                sleep(1) #Codigo de debug
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
@@ -439,7 +497,7 @@ class ProcessScheduler:
                 
               
             # for process in CopyArray:
-            #     process.print_process()        
+            #     process.print_process()
             # print("----------------------------")
             for process in CopyArray:
                 for i in range(process.WaitTime + process.ExecutedTime + process.StartTime ,TotalTime):
@@ -447,8 +505,16 @@ class ProcessScheduler:
             
             self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
             
-            if inp == 'p' or inp == 'P':
-                inp = input("Proxima iteracao: p  | De maneira automatica: a    ")
+            # def change(): #Tentativa de configurar o step buttom (nao funcional)
+            #     nonlocal inp
+            #     if inp == 'p':
+            #         inp = 'a'
+            #     else:
+            #         inp = 'p'
+            # self.step_buttom.configure(command=change())
+
+            if inp == 'p':
+                inp = input("1. Proxima iteracao: p\n2. De maneira automatica: a\n").lower()
 
                 
         print("----------------------------------")

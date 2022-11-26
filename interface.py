@@ -252,8 +252,9 @@ def new_log_window(num_process,quantum,overload):
         # process.get()
         # memory.get()
         # num_process,quantum,overload
-        algorithm = memory.get()
-        processWindow(num_process, quantum, overload, process_data, algorithm)
+        mem_algorithm = memory.get()
+        process_algorithm = process.get()
+        processWindow(num_process, quantum, overload, process_data, mem_algorithm, process_algorithm)
     proceed = Button(root,text ="Avançar", command = passing_data)
     proceed.place(x=x_position + 100, y=y_position + 330)
 
@@ -334,11 +335,17 @@ def memoryWindow():
     # processWindow()
     memory_window.mainloop()
 
-# def processWindow(num_process, quantum, overload, process_data, algorithm):
+# def processWindow(num_process, quantum, overload, process_data, mem_algorithm,process_algorithm):
 def processWindow(): #Utilizado para testes 
     # Variaveis para teste
-    num_process = 4 
-    process_data = {'0':[1,2,3,4,5], '1':[4,5,6,7,8], '2':[1,2,3,4,5],'3':[1,2,3,4,5],'4':[1,2,3,4,5]}
+    # [init, exec, dead, pri, pag]
+    process_data = {'0':[0,2,3,2,5], '1':[4,5,6,7,8], '2':[1,2,3,6,5],'3':[1,2,3,4,5],'4':[1,4,15,2,5], '5':[1,2,20,1,5], '6':[1,1,30,2,5]}
+    num_process = len(process_data)
+    mem_algorithm = 'FIFO'
+    process_algorithm = 'Edf'
+    quantum = 2
+    overload = 1
+    info_table = []
     # -------
 
     process_window = Tk()
@@ -347,7 +354,7 @@ def processWindow(): #Utilizado para testes
     process_window.configure(bg='#569BAA')
     process_window.iconbitmap('./images/icon.ico')
 
-    #Table with process informations
+#Table with process informations
     inf_x_space = 30
     inf_y_space = 100
     box_width = 2
@@ -355,57 +362,53 @@ def processWindow(): #Utilizado para testes
     info_n_columns = 6 #Will receive time spend to compute all process
     info_table = pd.DataFrame(index=np.arange(info_n_rows), columns=np.arange(info_n_columns)) #Vai armazenar a tabela de grids
 
-    for i in range(info_n_rows):
-        for j in range(info_n_columns):
-            info_table.loc[i,j] = Entry(process_window, width=box_width, fg='black',
-                        font=('Arial',16))
-            if j == 0:
-                info_table.loc[i,j].grid(row=i, column=j, padx=(inf_x_space,0))
-                info_table.loc[i,j].insert(END, str(i))
-            else:
-                info_table.loc[i,j].grid(row=i, column=j)
-                info_table.loc[i,j].insert(END,process_data[str(i)][j-1])
-
-            if i ==0:
-                info_table.loc[i,j].grid(row=i, column=j, pady=(inf_y_space,0))
-            
-            process_window.update()
-            # info_table.configure({"background":'Green'})
-
-    #Insere os labels de forma dinamica na tabela de informações
-    labels = ['Id', 'St', 'Ex', 'Dl', 'Pr', "Mp"]
-    x = 0
-    for k in range(info_n_columns): #Instancia os labels
-        process_window.update()
-        sleep(1)
-        lb = Label(process_window, text=str(labels[k]))
-        x = x + box_width*15
-        print(x)
-        y = inf_y_space + box_width * info_n_rows + 60
-        lb.place(x=x, y=y)#inf_y_space + box_width * info_n_rows + 10
-        lb.configure(bg='#569BAA')
-
-
-# Table o progress (Problemas quando protada junto com a de infromações)
-    # progress_x_space = 200
-    # progress_y_space = inf_y_space
-    # progress_n_rows = num_process #Will receive number of process
-    # progress_n_columns = 50 #Will receive time spend to compute all process
-    # progress_table = pd.DataFrame(index=np.arange(progress_n_rows), columns=np.arange(progress_n_columns)) #Vai armazenar a tabela de grids
-    
-    # for i in range(progress_n_rows):
-    #     for j in range(progress_n_columns):
-    #         progress_table.loc[i,j] = Entry(process_window, width=1, fg='black',
-    #                     font=('Arial',16,'bold'))
+    # for i in range(info_n_rows):
+    #     for j in range(info_n_columns):
+    #         info_table.loc[i,j] = Entry(process_window, width=box_width, fg='black',
+    #                     font=('Arial',16))
     #         if j == 0:
-    #             progress_table.loc[i,j].grid(row=i, column=j, padx=(progress_x_space,0))
+    #             info_table.loc[i,j].grid(row=i, column=j, padx=(inf_x_space,0))
+    #             info_table.loc[i,j].insert(END, str(i))
     #         else:
-    #             progress_table.loc[i,j].grid(row=i, column=j)
+    #             info_table.loc[i,j].grid(row=i, column=j)
+    #             info_table.loc[i,j].insert(END,process_data[str(i)][j-1])
 
     #         if i ==0:
-    #             progress_table.loc[i,j].grid(row=i, column=j, pady=(progress_y_space,0))
+    #             info_table.loc[i,j].grid(row=i, column=j, pady=(inf_y_space,0))
+            
+    #         process_window.update()
+    #         # info_table.configure({"background":'Green'})
+
+    # #Insere os labels de forma dinamica na tabela de informações
+    # labels = ['Id', 'St', 'Ex', 'Dl', 'Pr', "Mp"]
+    # x = 0
+    # for k in range(info_n_columns): #Instancia os labels
+    #     lb = Label(process_window, text=str(labels[k]))
+    #     x = x + box_width*15
+    #     y = inf_y_space + box_width * info_n_rows * 15
+    #     lb.place(x=x, y=y)#inf_y_space + box_width * info_n_rows + 10
+    #     lb.configure(bg='#569BAA')
+
+
+# Table o progress (Problemas quando plotada junto com a de infromações)
+    progress_x_space = 200
+    progress_y_space = inf_y_space
+    progress_n_rows = num_process #Will receive number of process
+    progress_n_columns = 50 #Will receive time spend to compute all process
+    progress_table = pd.DataFrame(index=np.arange(progress_n_rows), columns=np.arange(progress_n_columns)) #Vai armazenar a tabela de grids
+    
+    for i in range(progress_n_rows):
+        for j in range(progress_n_columns):
+            progress_table.loc[i,j] = Entry(process_window, width=1, fg='black',
+                        font=('Arial',16,'bold'))
+            if j == 0:
+                progress_table.loc[i,j].grid(row=i, column=j, padx=(progress_x_space,0))
+            else:
+                progress_table.loc[i,j].grid(row=i, column=j)
+
+            if i ==0:
+                progress_table.loc[i,j].grid(row=i, column=j, pady=(progress_y_space,0))
             # progress_table.configure({"background":'Green'})
-    # print(progress_table)
 
     #Looping de exemplo para passagem do tempo nos processos
     # from time import sleep 
@@ -415,7 +418,50 @@ def processWindow(): #Utilizado para testes
     #     sleep(1)
 
 # Creating ruller
-    #------
+    
+#Creating step stop buttons
+    step = Button(process_window,text =" > ", command = ())
+    step.place(x=progress_x_space, y=progress_y_space - 30)
+
+    stop = Button(process_window,text =" || ", command = ())
+    stop.place(x=progress_x_space + 30, y=progress_y_space - 30)
+
+    proceed = Button(process_window,text =" >> ", command = ())
+    proceed.place(x=progress_x_space + 60, y=progress_y_space - 30)
+
+#Após organizar a interface executa os processos
+    #Instanciando os processos
+    ProcessArray = [Process.process(process_data[str(i)][0],process_data[str(i)][1],process_data[str(i)][2],process_data[str(i)][3],process_data[str(i)][4],i) for i in range(num_process)]
+    
+    # print(objs)
+    # for i in range(len(objs)):
+    #     print(objs[i].ProcessId)
+
+    mem = 0
+    if mem_algorithm == "FIFO":
+       mem = 1
+
+    interface_package = [process_window, info_table, progress_table, step, stop, proceed]
+    scheduler = ProcessScheduler(quantum,overload,interface_package)
+
+    #---------------
+    process_algorithm = 'Edf' #Utilizado para teste
+    #---------------
+
+    if process_algorithm == 'FIFO':
+        scheduler.FIFO(ProcessArray, mem)
+    elif process_algorithm == 'Sjf':
+        scheduler.Sjf(ProcessArray, mem)
+    elif process_algorithm == 'RoundRobin':
+        scheduler.RoundRobin(ProcessArray, mem)
+    elif process_algorithm == 'Edf':
+        scheduler.Edf(ProcessArray, mem)
+    
+    
+    
+    
+# ------------------------------------------------------------------------------------
+#CODIGO QUE PROVAVELMENTE NÂO SERÀ UTILIZADO
 
 # Creating progress bar
     # def val_bar(max):
@@ -444,10 +490,8 @@ def processWindow(): #Utilizado para testes
     # progress_bar = ttk.Progressbar(process_window, variable=var_progress, maximum=100, style='green.Horizontal.TProgressbar')
     # progress_bar.place(x=0,y=29,width=620,height=27) #grid(1) == width(40)
     # val_bar(100000)
-
-#Creating labels information
-    #------
-
+#CODIGO QUE PROVAVELMENTE NÂO SERÀ UTILIZADO
+# ------------------------------------------------------------------------------------
     process_window.mainloop()
 
 def processos_res(lista):
