@@ -1,6 +1,8 @@
 import math
 import pandas as pd
 from time import sleep
+import sys
+from io import StringIO 
 
 import tkinter as tk
 from tkinter import *
@@ -339,7 +341,7 @@ def memoryWindow():
 def processWindow(): #Utilizado para testes 
     # Variaveis para teste
     # [init, exec, dead, pri, pag]
-    process_data = {'0':[0,2,3,2,5], '1':[4,5,6,7,8], '2':[1,2,3,6,5],'3':[1,2,3,4,5],'4':[1,4,15,2,5], '5':[1,2,20,1,5], '6':[1,1,30,2,5]}
+    process_data = {'0':[0,4,35,0,1], '1':[3,2,15,0,1], '2':[6,7,20,0,1],'3':[9,8,25,0,1]}
     num_process = len(process_data)
     mem_algorithm = 'FIFO'
     process_algorithm = 'Edf'
@@ -352,7 +354,7 @@ def processWindow(): #Utilizado para testes
     process_window.title('Escalonador de Processos')
     process_window.geometry("800x800+555+0")
     process_window.configure(bg='#569BAA')
-    process_window.iconbitmap('./images/icon.ico')
+    #process_window.iconbitmap('./images/icon.ico')
 
 #Table with process informations
     inf_x_space = 30
@@ -420,13 +422,23 @@ def processWindow(): #Utilizado para testes
 # Creating ruller
     
 #Creating step stop buttons
-    step = Button(process_window,text =" > ", command = ())
+    var = tk.IntVar()
+    var.set(0)
+
+    def Step():
+        var.set(0)
+        return
+    def Auto():
+        var.set(1)
+        return
+
+    step = Button(process_window,text =" > ", command = Step)
     step.place(x=progress_x_space, y=progress_y_space - 30)
 
-    stop = Button(process_window,text =" || ", command = ())
+    stop = Button(process_window,text =" || ", command = Step)
     stop.place(x=progress_x_space + 30, y=progress_y_space - 30)
 
-    proceed = Button(process_window,text =" >> ", command = ())
+    proceed = Button(process_window,text =" >> ", command = Auto)
     proceed.place(x=progress_x_space + 60, y=progress_y_space - 30)
 
 #Após organizar a interface executa os processos
@@ -441,11 +453,12 @@ def processWindow(): #Utilizado para testes
     if mem_algorithm == "FIFO":
        mem = 1
 
-    interface_package = [process_window, info_table, progress_table, step, stop, proceed]
+    
+    interface_package = [process_window, info_table, progress_table, step, stop, proceed, var]
     scheduler = ProcessScheduler(quantum,overload,interface_package)
 
     #---------------
-    process_algorithm = 'Edf' #Utilizado para teste
+    process_algorithm = 'FIFO' #Utilizado para teste
     #---------------
 
     if process_algorithm == 'FIFO':
@@ -504,3 +517,4 @@ def processos_res(lista):
 
 
     window.mainloop()
+
