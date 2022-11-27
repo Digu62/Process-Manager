@@ -103,7 +103,6 @@ class ProcessScheduler:
                     if process != ExecutingProcess:
                         self.progress_table.loc[int(process.ProcessId),TotalTime-1].configure({"background":'Grey'})
                 self.process_window.update()
-            # sleep(0.5) #Codigo de debug
             #print("Tempo atual:" + str(TotalTime)) #Codigo de debug
 
             try:
@@ -144,7 +143,6 @@ class ProcessScheduler:
 
         print(f"Turnaround : {str(self.TurnAround(CopyArray))}")
         print("----------------------------------")
-        #sleep(5)
         return
 
     def Sjf(self, ProcessArray, MemAlgo):
@@ -210,7 +208,6 @@ class ProcessScheduler:
                     if process != ExecutingProcess:
                         self.progress_table.loc[int(process.ProcessId),TotalTime-1].configure({"background":'Grey'})
                 self.process_window.update()
-            #sleep(1) #Codigo de debug
             
             try:
                 ExecutingProcess.ExecutedTime += 1
@@ -316,7 +313,6 @@ class ProcessScheduler:
                         if process != ExecutingProcess:
                             self.progress_table.loc[int(process.ProcessId),TotalTime-1].configure({"background":'Grey'})
                     self.process_window.update()
-                #sleep(1) #Codigo de debug
 
                 try:
                     ExecutingProcess.ExecutedTime += 1
@@ -349,7 +345,6 @@ class ProcessScheduler:
                     if process != ExecutingProcess:
                         self.progress_table.loc[int(process.ProcessId),TotalTime-1].configure({"background":'Grey'})
                 self.process_window.update()
-                #sleep(1) #Codigo de debug
 
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
@@ -469,18 +464,16 @@ class ProcessScheduler:
                         self.process_window.update()
                     
                     if ExecutingProcess.Deadline - (TotalTime - ExecutingProcess.StartTime) < 0:
-                        # print(f'TotalTime: {TotalTime}') #Codigo de debug
-                        # print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
-                        # self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Gray'}) #Ao ler o processo marca ele como cinza
-                        # self.process_window.update()
-                        # sleep(1) #Codigo de debug
+                        print(f'TotalTime: {TotalTime}') #Codigo de debug
+                        print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
+                        self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Gray'}) #Ao ler o processo marca ele como cinza
+                        self.process_window.update()
                         ExecutingProcess.MetDeadline = False
                     # else:
                     #     print(f'TotalTime: {TotalTime}') #Codigo de debug
                     #     print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
                     #     self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Green'}) #Ao ler o processo marca ele como verde
                     #     self.process_window.update()
-                    #     sleep(1) #Codigo de debug
 
                     if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
                             ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
@@ -510,7 +503,6 @@ class ProcessScheduler:
                         if process != ExecutingProcess:
                             self.progress_table.loc[int(process.ProcessId),TotalTime-1].configure({"background":'Grey'})
                     self.process_window.update()
-                #sleep(1) #Codigo de debug
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 

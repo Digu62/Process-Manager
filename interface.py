@@ -286,52 +286,83 @@ def memoryWindow():
     
     FirstHalf = math.floor(n_rows/2)
     SecondHalf = math.ceil(n_rows/2)
+    x_position = 150
+    y_position = 100
 
+#Cria os labels de memoria
+    lbl_main = Label(memory_window, text='Memória Principal', anchor='center')
+    lbl_main.place(x=x_position - 10, y=y_position - 30)
+    lbl_main.configure(bg='#569BAA')
+    lbl_virt = Label(memory_window, text='Memória Vitual', anchor='center')
+    lbl_virt.place(x=x_position + 340, y=y_position - 30)
+    lbl_virt.configure(bg='#569BAA')
 
-    # Memoria principal
+    main_memory = pd.DataFrame(index=np.arange(n_rows), columns=np.arange(2))
+# Memoria principal
     for i in range(FirstHalf):
         for j in range(n_columns):
-            table = Entry(memory_window, width=3, fg='black',
-                            font=('Arial',16,'bold'))
+            main_memory.loc[i,j] = Entry(memory_window, width=3, fg='black',
+                            font=('Arial',8,'bold'))
             if i <= (n_rows-SecondHalf)/2:
-                table.grid(row=i, column=j) 
+                main_memory.loc[i,j].grid(row=i, column=j)
             else:
-                table.grid(row=i, column=j) 
-            # , pady=(20),padx=(20), sticky=E
-            table.insert(END,lst[i][j])
+                main_memory.loc[i,j].grid(row=i, column=j)
+            main_memory.loc[i,j].insert(END,lst[i][j])
+
+            if j == 0:
+                 main_memory.loc[i,j].grid(padx=(x_position,0))
+
+            if i == 0:
+                main_memory.loc[i,j].grid(pady=(y_position,0))
+            
+            memory_window.update()
 
     for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
-            table = Entry(memory_window, width=3, fg='black',
-                            font=('Arial',16,'bold'))
+            main_memory.loc[i,j] = Entry(memory_window, width=3, fg='black',
+                            font=('Arial',8,'bold'))
             if i <= (n_rows-SecondHalf)/2:
-                table.grid(row=i-SecondHalf, column=j+2) 
+                main_memory.loc[i,j].grid(row=i-SecondHalf, column=j+2) 
             else:
-                table.grid(row=i-SecondHalf, column=j+2) 
-            # , pady=(0),padx=(0)
-            table.insert(END,lst[i][j])
+                main_memory.loc[i,j].grid(row=i-SecondHalf, column=j+2)
 
+            main_memory.loc[i,j].insert(END,lst[i][j])
+
+            if i == 25:
+                main_memory.loc[i,j].grid(pady=(y_position,0))
 
     # Memoria virtual
+
+    virtual_memory = pd.DataFrame(index=np.arange(n_rows), columns=np.arange(2))
+
     k = 5
     for i in range(FirstHalf): #rows
         for j in range(n_columns): # columns
-            table = Entry(memory_window, width=3, fg='black',
-                            font=('Arial',10,'bold'))
+            virtual_memory.loc[i,j] = Entry(memory_window, width=3, fg='black',
+                            font=('Arial',8,'bold'))
 
             if j == 0:
-                table.grid(row=i, column=j+k, padx=(300,0) ) 
+                virtual_memory.loc[i,j].grid(row=i, column=j+k, padx=(300,0))
             else:
-                table.grid(row=i, column=j+k ) 
-            table.insert(END,lst[i][j])
+                virtual_memory.loc[i,j].grid(row=i, column=j+k )
+            virtual_memory.loc[i,j].insert(END,lst[i][j])
+
+            if j == 0:
+                 virtual_memory.loc[i,j].grid(padx=(x_position + 100,0))
+
+            if i == 0:
+                virtual_memory.loc[i,j].grid(pady=(y_position,0))
     
     for i in range(SecondHalf,n_rows):
         for j in range(n_columns):
-            table = Entry(memory_window, width=3, fg='black',
-                            font=('Arial',10,'bold'))
+            virtual_memory.loc[i,j] = Entry(memory_window, width=3, fg='black',
+                            font=('Arial',8,'bold'))
 
-            table.grid(row=i-SecondHalf, column=j+k+2) 
-            table.insert(END,lst[i][j])
+            virtual_memory.loc[i,j].grid(row=i-SecondHalf, column=j+k+2) 
+            virtual_memory.loc[i,j].insert(END,lst[i][j])
+
+            if i == 25:
+                virtual_memory.loc[i,j].grid(pady=(y_position,0))
 
     
     # processWindow()
@@ -341,7 +372,7 @@ def memoryWindow():
 def processWindow(): #Utilizado para testes 
     # Variaveis para teste
     # [init, exec, dead, pri, pag]
-    process_data = {'0':[0,4,35,0,1], '1':[3,2,15,0,1], '2':[6,7,20,0,1],'3':[9,8,25,0,1]}
+    process_data = {'0':[0,4,35,0,1], '1':[3,2,15,0,1], '2':[6,7,20,0,1],'3':[9,8,25,0,1], '4':[1,8,25,0,1], '5':[2,8,25,0,1]}
     num_process = len(process_data)
     mem_algorithm = 'FIFO'
     process_algorithm = 'Edf'

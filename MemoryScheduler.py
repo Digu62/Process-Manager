@@ -4,13 +4,14 @@ import Pages
 import Memory
 import VirtualMemory
 
+from interface import *
+
 class MemoryScheduler:
     def __init__ (self):
         pass
 
     #Escalonamento
     def FIFO(self,Mem, VMem, Process):
-        
         IndexProcessPages = VMem.FindProcess(Process)
 
         if VMem.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
