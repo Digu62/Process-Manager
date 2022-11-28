@@ -201,17 +201,17 @@ def log_window(num_process,quantum,overload):
     proceed = Button(root,text ="Avançar", command = passing_data)
     proceed.place(x=x_position + 100, y=y_position + 330)
 
-def sheduler_window(num_process, quantum, overload, process_data, mem_algorithm,process_algorithm):
-# def processWindow(): #Utilizado para testes 
-#     # Variaveis para teste
-#     # [init, exec, dead, pri, pag]
-#     process_data = {'0':[2,4,35,0,1], '1':[3,2,15,0,1], '2':[6,7,20,0,1],'3':[9,8,25,0,1], '4':[1,8,25,0,1], '5':[2,8,25,0,1]}
-#     num_process = len(process_data)
-#     mem_algorithm = 'FIFO'
-#     process_algorithm = 'Edf'
-#     quantum = 2
-#     overload = 1
-#     info_table = []
+# def sheduler_window(num_process, quantum, overload, process_data, mem_algorithm,process_algorithm):
+def sheduler_window(): #Utilizado para testes 
+    # Variaveis para teste
+    # [init, exec, dead, pri, pag]
+    process_data = {'0':[2,4,35,0,1], '1':[3,2,15,0,1], '2':[6,7,20,0,1],'3':[9,8,25,0,1], '4':[1,8,25,0,1], '5':[2,8,25,0,1]}
+    num_process = len(process_data)
+    mem_algorithm = 'FIFO'
+    process_algorithm = 'Edf'
+    quantum = 2
+    overload = 1
+    info_table = []
     # -------
 
     #Global variables
@@ -410,7 +410,7 @@ def sheduler_window(num_process, quantum, overload, process_data, mem_algorithm,
 #Instanciando os processos
     #---------------
     memory_interface_package = [None,None,None]
-    # process_algorithm = 'FIFO' #Utilizado para teste
+    process_algorithm = 'FIFO' #Utilizado para teste
     #---------------
 
     ProcessArray = [Process.process(process_data[str(i)][0],process_data[str(i)][1],process_data[str(i)][2],process_data[str(i)][3],process_data[str(i)][4],i) for i in range(num_process)]
