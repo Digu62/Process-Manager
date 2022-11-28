@@ -4,10 +4,18 @@ import Pages
 import Memory
 import VirtualMemory
 
-from interface import *
+# from interface import *
+import tkinter as tk
+from tkinter import *
+from tkinter import ttk
 
+from time import sleep
 class MemoryScheduler:
-    def __init__ (self):
+    def __init__ (self, memory_interface):
+        #Recebe os valores da interface
+        self.memory_window = memory_interface[0]
+        self.main_memory = memory_interface[1]
+        self.virtual_memory = memory_interface[2]
         pass
 
     #Escalonamento
@@ -18,7 +26,7 @@ class MemoryScheduler:
             return
         
         # por padrão o procceso que chegou primeiro é colocado no começo, já que é o fifo
-        # e os ultimos vao ser colocados no final  
+        # e os ultimos vao ser colocados no final
         
         # a memoria ta cheia e o processo não ta nela
         while Mem.EmptyPagesNum < Process.MemoryPages:
@@ -31,13 +39,13 @@ class MemoryScheduler:
                 j = 0
                 for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
                     VMem.PageList[page].RamAdress = i+j
+                    # self.main_memory.loc[i,1].insert(END,i) #Aloca o processo executando na memoria real 
                     Mem.PageList[i+j].Process = Process
                     Mem.PageList[i+j].RecentlyUsed = 50
                     Mem.PageList[i+j].VirtualMemoryAddress = page
                     j += 1   
                 Mem.EmptyPagesNum -= Process.MemoryPages
                 return  
-
         return
 
     def LRU(self,Mem, VMem, Process):
@@ -73,32 +81,32 @@ class MemoryScheduler:
         return
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    ProcessA = Process.process(0,4,7,0,17,1)
-    ProcessB = Process.process(2,2,3,0,17,2)
-    ProcessC = Process.process(4,1,5,0,17,3)
-    ProcessD = Process.process(6,3,10,0,17,4)
+#     ProcessA = Process.process(0,4,7,0,17,1)
+#     ProcessB = Process.process(2,2,3,0,17,2)
+#     ProcessC = Process.process(4,1,5,0,17,3)
+#     ProcessD = Process.process(6,3,10,0,17,4)
 
 
-    ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
+#     ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
 
-    scheduler = MemoryScheduler()
-    Mem = Memory.Memory()
-    VMem = VirtualMemory.VirtualMemory(ProcessArray)
+#     scheduler = MemoryScheduler()
+#     Mem = Memory.Memory()
+#     VMem = VirtualMemory.VirtualMemory(ProcessArray)
 
-    """ scheduler.FIFO(Mem, VMem, ProcessA)
-    scheduler.FIFO(Mem, VMem, ProcessB)
-    scheduler.FIFO(Mem, VMem, ProcessA)
-    scheduler.FIFO(Mem, VMem, ProcessD)
-    scheduler.FIFO(Mem, VMem, ProcessC) """
+#     """ scheduler.FIFO(Mem, VMem, ProcessA)
+#     scheduler.FIFO(Mem, VMem, ProcessB)
+#     scheduler.FIFO(Mem, VMem, ProcessA)
+#     scheduler.FIFO(Mem, VMem, ProcessD)
+#     scheduler.FIFO(Mem, VMem, ProcessC) """
 
-    scheduler.LRU(Mem, VMem, ProcessA)
-    scheduler.LRU(Mem, VMem, ProcessB)
-    scheduler.LRU(Mem, VMem, ProcessA)
-    scheduler.LRU(Mem, VMem, ProcessD)
-    scheduler.LRU(Mem, VMem, ProcessC)
+#     scheduler.LRU(Mem, VMem, ProcessA)
+#     scheduler.LRU(Mem, VMem, ProcessB)
+#     scheduler.LRU(Mem, VMem, ProcessA)
+#     scheduler.LRU(Mem, VMem, ProcessD)
+#     scheduler.LRU(Mem, VMem, ProcessC)
 
-    print("a")
-    print("a")
-    print("a")
+#     print("a")
+#     print("a")
+#     print("a")

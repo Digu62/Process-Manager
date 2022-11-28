@@ -11,23 +11,22 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 
+
 class ProcessScheduler:
     
     ExecutingProcess = None
 
-    def __init__(self, Quantum, Overload,interface_package):
+    def __init__(self, Quantum, Overload,process_interface, memory_interface):
         self.Quantum = Quantum
         self.Overload = Overload
-        self.process_window = interface_package[0]
-        self.info_table = interface_package[1]
-        self.progress_table = interface_package[2]
-        self.step_buttom = interface_package[3]
-        self.stop_buttom = interface_package[4]
-        self.proceed_buttom = interface_package[5]
-        self.var = interface_package[6]
-
-#Nota [Apagar apos finalizar o codigo]
-#progress_table.loc[numero do processo, tempo da execução]
+        self.process_window = process_interface[0]
+        self.info_table = process_interface[1]
+        self.progress_table = process_interface[2]
+        self.step_buttom = process_interface[3]
+        self.stop_buttom = process_interface[4]
+        self.proceed_buttom = process_interface[5]
+        self.var = process_interface[6]
+        self.memory_interface = memory_interface
 
     def TurnAround(self, ProcessList):
         """The Turnaround is the time that the process wait to ending, counting
@@ -57,7 +56,6 @@ class ProcessScheduler:
         for process in ProcessArray: # copia pq python é so por referencia
             CopyArray = np.append(CopyArray, process.clone() )
 
-
         WorkingList = np.array(CopyArray) # lista de processos que serão executados, mas talvez ainda não esteja prontos
         TotalTime = 0 # conta o tempo decorrido
         ProcessCount = CopyArray.size
@@ -66,7 +64,7 @@ class ProcessScheduler:
 
         inp = 'p' #Inicia executando passao a passo
 
-        MemScheduler = MemoryScheduler.MemoryScheduler() #Instancia um escalonador de memoria
+        MemScheduler = MemoryScheduler.MemoryScheduler(self.memory_interface) #Instancia um escalonador de memoria
         Mem = Memory.Memory()  #Instancia uma memoria real
         VMem = VirtualMemory.VirtualMemory(CopyArray) #Instancia uma memoria virtual
 

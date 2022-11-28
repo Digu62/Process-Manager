@@ -4,5 +4,5 @@ from MemoryScheduler import *
 from interface import *
 
 # processWindow() #Utilizado para testes
-memoryWindow()
-# main_window() #Inicia o programa
+# memoryWindow()
+main_window() #Inicia o programa

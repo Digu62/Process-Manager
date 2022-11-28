@@ -7,7 +7,7 @@ class VirtualMemory:
         # Cria as paginas na memoria virtual com o id do processo
         Page= []  
         for Process in ProcessList:
-            for i in range(Process.MemoryPages):
+            for i in range(Process.MemoryPages):    
                 Page.append(Pages.VirtualPage(Process))
 
         self.Space = len(Page)*4 # tamanho total da memoria
