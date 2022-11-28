@@ -261,7 +261,7 @@ def sheduler_window(): #Utilizado para testes
 
 
 # Table o progress (Problemas quando plotada junto com a de infromações)
-    progress_x = y_position + 150
+    progress_y = y_position + 150
     progress_n_rows = num_process #Will receive number of process
     progress_n_columns = 50 #Will receive time spend to compute all process
     progress_table = pd.DataFrame(index=np.arange(progress_n_rows), columns=np.arange(progress_n_columns)) #Vai armazenar a tabela de grids
@@ -276,8 +276,15 @@ def sheduler_window(): #Utilizado para testes
                 progress_table.loc[i,j].grid(row=i, column=j)
 
             if i ==0:
-                progress_table.loc[i,j].grid(row=i, column=j, pady=(progress_x,0))
-
+                progress_table.loc[i,j].grid(row=i, column=j, pady=(progress_y,0))
+        
+    #Insere os labels de forma dinamica na tabela de progresso
+    y = progress_y + 5
+    for k in range(info_n_rows): #Instancia os labels
+        lb = Label(process_window, text=str(k), font=("Arial", 8))
+        lb.place(x=x_position-30, y=y)
+        y = y + 28
+        lb.configure(bg='#569BAA')
 # Creating ruller
     
 #Creating step stop buttons
@@ -293,13 +300,13 @@ def sheduler_window(): #Utilizado para testes
         return
 
     step = Button(process_window,text =" > ", command = Step)
-    step.place(x=x_position, y=progress_x - 30)
+    step.place(x=x_position, y=progress_y - 30)
 
     stop = Button(process_window,text =" || ", command = Step)
-    stop.place(x=x_position + 30, y=progress_x - 30)
+    stop.place(x=x_position + 30, y=progress_y - 30)
 
     proceed = Button(process_window,text =" >> ", command = Auto)
-    proceed.place(x=x_position + 60, y=progress_x - 30)
+    proceed.place(x=x_position + 60, y=progress_y - 30)
 
 
 #Creating a back buttom
