@@ -201,17 +201,17 @@ def log_window(num_process,quantum,overload):
     proceed = Button(root,text ="Avançar", command = passing_data)
     proceed.place(x=x_position + 100, y=y_position + 330)
 
-# def sheduler_window(num_process, quantum, overload, process_data, mem_algorithm,process_algorithm):
-def sheduler_window(): #Utilizado para testes 
+def sheduler_window(num_process, quantum, overload, process_data, mem_algorithm,process_algorithm):
+# def sheduler_window(): #Utilizado para testes 
     # Variaveis para teste
     # [init, exec, dead, pri, pag]
-    process_data = {'0':[2,4,35,0,1], '1':[3,2,15,0,1], '2':[6,7,20,0,1],'3':[9,8,25,0,1], '4':[1,8,25,0,1], '5':[2,8,25,0,1]}
-    num_process = len(process_data)
-    mem_algorithm = 'FIFO'
-    process_algorithm = 'Edf'
-    quantum = 2
-    overload = 1
-    info_table = []
+    # process_data = {'0':[2,4,35,0,1], '1':[3,2,15,0,1], '2':[6,7,20,0,1],'3':[9,8,25,0,1], '4':[1,8,25,0,1], '5':[2,8,25,0,1]}
+    # num_process = len(process_data)
+    # mem_algorithm = 'FIFO'
+    # process_algorithm = 'Edf'
+    # quantum = 2
+    # overload = 1
+    # info_table = []
     # -------
 
     #Global variables
@@ -285,8 +285,52 @@ def sheduler_window(): #Utilizado para testes
         lb.place(x=x_position-30, y=y)
         y = y + 28
         lb.configure(bg='#569BAA')
+
+    #Insere os labels de ajuda
+    #Executando
+    guide_exec = Entry(process_window, width=box_width, fg='black',
+                        font=('Arial',8))
+    guide_exec.grid(row=0, column=0, padx=(x_position-100))
+    guide_exec.configure(bg='Green')
+    guide_exec_lb = Label(process_window, text='Executando', font=("Arial", 8))
+    guide_exec_lb.place(x=x_position-80, y=95)
+    guide_exec_lb.configure(bg='#569BAA')
+    #Espera
+    guide_exec = Entry(process_window, width=box_width, fg='black',
+                        font=('Arial',8))
+    guide_exec.grid(row=0, column=0, padx=(x_position-100), pady=(30,0))
+    guide_exec.configure(bg='Gray')
+    guide_exec_lb = Label(process_window, text='Espera', font=("Arial", 8))
+    guide_exec_lb.place(x=x_position-80, y=113)
+    guide_exec_lb.configure(bg='#569BAA')
+    #Overload
+    guide_exec = Entry(process_window, width=box_width, fg='black',
+                        font=('Arial',8))
+    guide_exec.grid(row=0, column=0, padx=(x_position-100), pady=(60,0))
+    guide_exec.configure(bg='Red')
+    guide_exec_lb = Label(process_window, text='Overload', font=("Arial", 8))
+    guide_exec_lb.place(x=x_position-80, y=129)
+    guide_exec_lb.configure(bg='#569BAA')
+    #Estouro
+    guide_exec = Entry(process_window, width=box_width, fg='black',
+                        font=('Arial',8))
+    guide_exec.grid(row=0, column=0, padx=(x_position-100), pady=(90,0))
+    guide_exec.configure(bg='Blue')
+    guide_exec_lb = Label(process_window, text='Estouro', font=("Arial", 8))
+    guide_exec_lb.place(x=x_position-80, y=143)
+    guide_exec_lb.configure(bg='#569BAA')
+
 # Creating ruller
-    
+    x = x_position
+    for k in range(progress_n_columns+1): #Instancia os labels
+        lb = Label(process_window, text=str(k), font=("Arial", 8))
+        lb.place(x=x, y=progress_y - 22)
+        if k < 10:
+            x += 15
+        else:
+            x += 16
+        lb.configure(bg='#569BAA')
+        
 #Creating step stop buttons
     var = tk.IntVar()
     var.set(0)
@@ -300,14 +344,13 @@ def sheduler_window(): #Utilizado para testes
         return
 
     step = Button(process_window,text =" > ", command = Step)
-    step.place(x=x_position, y=progress_y - 30)
+    step.place(x=x_position, y=progress_y - 55)
 
     stop = Button(process_window,text =" || ", command = Step)
-    stop.place(x=x_position + 30, y=progress_y - 30)
+    stop.place(x=x_position + 30, y=progress_y - 55)
 
     proceed = Button(process_window,text =" >> ", command = Auto)
-    proceed.place(x=x_position + 60, y=progress_y - 30)
-
+    proceed.place(x=x_position + 60, y=progress_y - 55)
 
 #Creating a back buttom
     # def call_back(num_process, quantum, overload):
