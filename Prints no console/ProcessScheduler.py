@@ -493,6 +493,7 @@ class ProcessScheduler:
         print("  X = Executando")
         print("  O = Esperando")
         print("  # = Overload")
+        print("  Cada pagina na memoria possui 4096 de endereços assim a pagina n vai do endereço [n*4096,n*4096-1]")
         print()
         print()
         time.sleep(1)
