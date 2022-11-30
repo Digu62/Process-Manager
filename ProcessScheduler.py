@@ -62,8 +62,6 @@ class ProcessScheduler:
         ExecutingProcess = None #Process in execution   
         ReadyList = np.array([])
 
-        inp = 'p' #Inicia executando passao a passo
-
         MemScheduler = MemoryScheduler.MemoryScheduler() #Instancia um escalonador de memoria
         Mem = Memory.Memory()  #Instancia uma memoria real
         VMem = VirtualMemory.VirtualMemory(CopyArray) #Instancia uma memoria virtual
@@ -94,14 +92,11 @@ class ProcessScheduler:
 
             #Ao executar um processo atualiza a janela
             if ExecutingProcess != None:
-                # print(f'TotalTime: {TotalTime}') #Codigo de debug
-                # print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
                 self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Green'}) #Ao ler o processo marca ele como verde
                 for process in ReadyList:
                     if process != ExecutingProcess:
                         self.progress_table.loc[int(process.ProcessId),TotalTime-1].configure({"background":'Grey'})
                 self.process_window.update()
-            #print("Tempo atual:" + str(TotalTime)) #Codigo de debug
 
             try:
                 ExecutingProcess.ExecutedTime += 1
@@ -121,10 +116,6 @@ class ProcessScheduler:
                 process.PrintList.append("O")
                 process.WaitTime += 1
 
-
-            # for process in CopyArray:
-            #     process.print_process()        
-            # print("----------------------------")
             for process in CopyArray:
                 for i in range(process.WaitTime + process.ExecutedTime + process.StartTime ,TotalTime):
                     process.PrintList.append(" ")
@@ -276,8 +267,6 @@ class ProcessScheduler:
         Overloading = False
         OverloadTime = self.Overload
 
-        inp = 'p'
-
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
         Mem = Memory.Memory()
@@ -304,13 +293,10 @@ class ProcessScheduler:
                     break
 
             TotalTime += 1
-            #print("Tempo atual:" + str(TotalTime))
 
             # Executando
             if not Overloading:
                 if ExecutingProcess != None:
-                # print(f'TotalTime: {TotalTime}') #Codigo de debug
-                # print(f'ProcessId: {int(ExecutingProcess.ProcessId)}') #Codigo de debug
                     self.progress_table.loc[int(ExecutingProcess.ProcessId),TotalTime-1].configure({"background":'Green'}) #Ao ler o processo marca ele como verde
                     for process in ReadyList:
                         if process != ExecutingProcess:
@@ -373,10 +359,6 @@ class ProcessScheduler:
                     process.PrintList.append(" ")
             
             self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
-            
-            
-            
-
 
             if self.var.get() == 0:
                 self.process_window.wait_variable(self.var)
@@ -413,8 +395,6 @@ class ProcessScheduler:
         Overloading = False
         OverloadTime = self.Overload
 
-        inp = 'p'
-
         MemScheduler = MemoryScheduler.MemoryScheduler()
 
         Mem = Memory.Memory()
@@ -447,7 +427,6 @@ class ProcessScheduler:
                     MemScheduler.LRU(Mem, VMem, ExecutingProcess)
 
             TotalTime += 1
-            #print("Tempo atual:" + str(TotalTime))
 
             # Executando
             if not Overloading:
@@ -526,14 +505,6 @@ class ProcessScheduler:
                     process.PrintList.append(" ")
             
             self.PrintProcess(CopyArray, TotalTime, Mem, VMem)
-            
-            # def change(): #Tentativa de configurar o step buttom (nao funcional)
-            #     nonlocal inp
-            #     if inp == 'p':
-            #         inp = 'a'
-            #     else:
-            #         inp = 'p'
-            # self.step_buttom.configure(command=change())
 
             if self.var.get() == 0:
                 self.process_window.wait_variable(self.var)
@@ -577,6 +548,7 @@ class ProcessScheduler:
         print("  X = Executando")
         print("  O = Esperando")
         print("  # = Overload")
+        print("  Cada pagina na memoria possui 4096 de endereços assim a pagina n vai do endereço [n*4096,n*4096-1]")
         print()
         print()
         self.process_window.update_idletasks()

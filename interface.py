@@ -138,6 +138,7 @@ def log_window(num_process,quantum,overload):
     # Coleta os dados do processo atual e passa para o proximo
     def next_process():
         nonlocal actual_process
+        init_entry.focus()
         if all_filled(): #Não altera os dados se algum dos campos estiver zerado
             if actual_process < num_process: #Não excede o limite de processos
                 #Armazena os dados
@@ -145,7 +146,7 @@ def log_window(num_process,quantum,overload):
                                               exec_entry.get(), 
                                               dead_entry.get(), 
                                               pri_entry.get(),  
-                                              pag_entry.get()] 
+                                              pag_entry.get()]
                 actual_process += 1 
                 if actual_process < num_process: #So limpa os campos se ainda tiver processos a coletar
                     lb_id.configure(text=f'Processo(Id): {actual_process}')
@@ -191,7 +192,15 @@ def log_window(num_process,quantum,overload):
     
     #Transfere os valores para a interface do escalonador
     def passing_data():
-        if len(process_data) != num_process:  #Verifica se todos os processos foram cadastrados
+        if len(process_data) == num_process-1 and all_filled():
+            nonlocal actual_process
+            process_data[str(actual_process)] = [init_entry.get(), 
+                                              exec_entry.get(), 
+                                              dead_entry.get(), 
+                                              pri_entry.get(),  
+                                              pag_entry.get()]
+            actual_process += 1
+        elif len(process_data) != num_process:  #Verifica se todos os processos foram cadastrados
             messagebox.showinfo(message="Ainda faltam processos a serem cadastrados")
             return
         mem_algorithm = memory.get()
@@ -341,7 +350,7 @@ def sheduler_window(num_process, quantum, overload, process_data, mem_algorithm,
     proceed = Button(process_window,text =" >> ", command = Auto)
     proceed.place(x=x_position + 60, y=progress_y - 55)
 
-    turn_around_label = Label(process_window, text='', font=("Arial", 12))
+    turn_around_label = Label(process_window, text='', font=("Arial", 13))
     turn_around_label.place(x=x_position + 95, y=progress_y - 55)
     turn_around_label.configure(bg='#569BAA')
 
@@ -462,13 +471,14 @@ def sheduler_window(num_process, quantum, overload, process_data, mem_algorithm,
     process_interface_package = [process_window, info_table, progress_table, step, stop, proceed, var , turn_around_label]
     
     scheduler = ProcessScheduler(quantum,overload,process_interface_package)
+    print(process_algorithm)
     if process_algorithm == 'FIFO':
         scheduler.FIFO(ProcessArray, mem)
-    elif process_algorithm == 'Sjf':
+    elif process_algorithm == 'SJF':
         scheduler.Sjf(ProcessArray, mem)
-    elif process_algorithm == 'RoundRobin':
+    elif process_algorithm == 'Round Robin':
         scheduler.RoundRobin(ProcessArray, mem)
-    elif process_algorithm == 'Edf':
+    elif process_algorithm == 'EDF':
         scheduler.Edf(ProcessArray, mem)
     
     process_window.mainloop()
